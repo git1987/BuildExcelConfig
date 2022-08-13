@@ -1,0 +1,72 @@
+﻿using UnityEngine;
+
+public class ConfigAssetsData : MonoBehaviour
+{
+    static private ConfigAssetsData configAssetsDate;
+    static public ConfigAssetsData instance
+    { get { return configAssetsDate; } }
+    static public LanguageConfigAsset.LanguageType languageType = LanguageConfigAsset.LanguageType.Base;
+
+    AssetBundle ab;
+    public bool initFinish { private set; get; }
+    private void Awake()
+    {
+        if (configAssetsDate == null) configAssetsDate = this;
+        else
+        {
+            Debug.LogError(this.GetType().Name + "已经存在");
+            Destroy(this.gameObject);
+            return;
+        }
+        Init();
+    }
+    public void Init()
+    {
+        string streamingFilePath =
+#if UNITY_ANDROID
+        Application.streamingAssetsPath +"/Android/";
+#elif UNITY_STANDALONE_OSX
+        Application.streamingAssetsPath +"/IOS/";
+#elif UNITY_IOS
+       Application.streamingAssetsPath +"/IOS/";
+#elif UNITY_STANDALONE_WIN
+ Application.streamingAssetsPath + "/Windows/";
+#endif
+        ab = AssetBundle.LoadFromFile(streamingFilePath + "/config");
+#if !List
+        _#{className}ConfigAsset = ab.LoadAsset<#{ClassName}ConfigAsset>(typeof(#{ClassName}ConfigAsset.#{ClassName}Config).Name);
+        _#{className}ConfigAsset.ReadList();
+#endif
+        _languageData = ab.LoadAsset<LanguageConfigAsset>(typeof(LanguageConfigAsset.LanguageConfig).Name);
+        _languageData.ReadList();
+        initFinish = true;
+        ab.Unload(false);
+    }
+    public string GetLanguageText(string baseLanguage)
+    {
+        string text = languageData.configsDictionary[baseLanguage].GetLanguageText(languageType);
+        return text;
+    }
+    private LanguageConfigAsset _languageData;
+    public LanguageConfigAsset languageData
+    {
+        get
+        {
+            if (_languageData == null)
+                Debug.LogError("没有初始化AssetBundle");
+            return _languageData;
+        }
+    }
+#if !List
+    private #{ClassName}ConfigAsset _#{className}ConfigAsset;
+    public #{ClassName}ConfigAsset #{className}ConfigAsset
+    {
+        get
+        {
+            if (_#{className}ConfigAsset == null)
+                Debug.LogError("没有初始化AssetBundle");
+            return _#{className}ConfigAsset;
+        }
+    }
+#endif
+}

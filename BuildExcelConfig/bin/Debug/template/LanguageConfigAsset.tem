@@ -1,0 +1,53 @@
+﻿using System.Collections.Generic;
+
+using UnityEngine;
+
+public class LanguageConfigAsset : ScriptableObject
+{
+    public enum LanguageType
+    {
+        Base = 0,
+#if !languageType
+#endif
+    }
+    [System.Serializable]
+    public class LanguageConfig
+    {
+        public string baseLanguage;
+        public List<string> textList;
+        public Dictionary<LanguageType, string> texts;
+        public LanguageConfig(string _baseLanguage)
+        {
+            this.baseLanguage = _baseLanguage;
+            textList = new List<string>();
+            textList.Add(this.baseLanguage);
+            texts = new Dictionary<LanguageType, string>();
+            texts.Add(LanguageType.Base, this.baseLanguage);
+        }
+        public void WriteLanguage(LanguageType type, string text)
+        {
+            if (!texts.ContainsKey(type))
+            {
+                texts.Add(type, text);
+                textList.Add(text);
+            }
+        }
+        public string GetLanguageText(LanguageType type)
+        {
+            if (texts.ContainsKey(type)) return texts[type];
+            return baseLanguage + ":" + type + " null";
+        }
+    }
+
+    public List<LanguageConfig> configs;
+    public Dictionary<string, LanguageConfig> configsDictionary;
+    public void ReadList()
+    {
+        configsDictionary = new Dictionary<string, LanguageConfig>();
+        for (int i = 0; i < configs.Count; i++)
+        {
+            if (!configsDictionary.ContainsKey(configs[i].baseLanguage))
+                configsDictionary.Add(configs[i].baseLanguage, configs[i]);
+        }
+    }
+}
