@@ -1,77 +1,41 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-
 using UnityEngine;
 using LitJson;
-
+/// <summary>
+/// Json数据类型的类
+/// </summary>
 public class #{ClassName}ConfigAsset : ConfigAssetBase
 {
-    public enum LanguageType
-    {
-        Base = -1,
-#if List
-        #{languageType,}
-#endif
-    }
     [System.Serializable]
     public class #{ClassName}Config : ConfigAssetBase.ConfigAsset
     {
-        public string key;
 #if List
         #{typeName} #{variableName};
 #endif
-        public #{ClassName}Config()
-        {
-        }
         public void InitJson(JsonData jd)
         {
-            this.key = jd["key"].ToString();
 #if List
             #{variableName} = #{assignment};
 #endif
         }
-        public string GetLanguageText(LanguageType type)
-        {
-            switch (type)
-            {
-                case LanguageType.Base:
-#if List
-                case LanguageType.#{variableName}:
-                    return #{variableName};
-#endif
-                default:
-                    UnityEngine.Debug.LogError(type.ToString() + " is null===>" + key);
-                    return key;
-            }
-        }
     }
-    public LanguageType languageType;
     public List<#{ClassName}Config> configs;
-    public Dictionary<string, #{ClassName}Config> configsDictionary;
-    
+    public Dictionary<int, #{ClassName}Config> configsDictionary;
     public override string GetConfigName()
     {
         return "#{ClassName}Config";
     }
-    public string GetLanguageText(string key)
-    {
-        if (configsDictionary.ContainsKey(key))
-            return configsDictionary[key].GetLanguageText(languageType);
-        else
-        {
-            UnityEngine.Debug.Log(key + " is null");
-            return key;
-        }
-    }
     public void ReadList()
     {
-        configsDictionary = new Dictionary<string, #{ClassName}Config>();
+        configsDictionary = new Dictionary<int, #{ClassName}Config>();
         for (int i = 0; i < configs.Count; i++)
         {
-            if (!configsDictionary.ContainsKey(configs[i].key))
-                configsDictionary.Add(configs[i].key, configs[i]);
+            if (!configsDictionary.ContainsKey(configs[i].ID))
+                configsDictionary.Add(configs[i].ID, configs[i]);
         }
     }
+
     public override void ReadFromData(object obj)
     {
         JsonData jsonData = obj as JsonData;
@@ -84,6 +48,7 @@ public class #{ClassName}ConfigAsset : ConfigAssetBase
                 for (int i = 0; i < config.Count; i++)
                 {
                     #{ClassName}Config configItem = new #{ClassName}Config();
+                    configItem.ID = int.Parse(config[i]["ID"].ToString());
                     configItem.InitJson(config[i]);
                     configs.Add(configItem);
                 }
@@ -94,4 +59,5 @@ public class #{ClassName}ConfigAsset : ConfigAssetBase
             throw new System.Exception("配置名称不对==>" + jsonData["name"].ToString());
         }
     }
+
 }

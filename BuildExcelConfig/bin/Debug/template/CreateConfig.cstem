@@ -2,8 +2,13 @@
 using UnityEditor;
 using System.IO;
 using System.Text;
+using System.Collections;
 using System.Collections.Generic;
+using LitJson;
 
+/// <summary>
+/// 编辑器内使用build unity asset的editor 类
+/// </summary>
 public class CreateConfig
 {
     [MenuItem("CreateAsset/CreateConfigAssets")]
@@ -14,12 +19,11 @@ public class CreateConfig
     }
     private static void CreateConfigAssets()
     {
-        if (!Directory.Exists(Application.dataPath + "/ConfigAsset/"))
-            Directory.CreateDirectory(Application.dataPath + "/ConfigAsset/");
+        if (!Directory.Exists(Application.dataPath + "/Res/ConfigAsset/"))
+            Directory.CreateDirectory(Application.dataPath + "/Res/ConfigAsset/");
 #if !List
         CreateConfigAsset<#{ClassName}ConfigAsset>();
 #endif
-        CreateLanguagConfigAsset();
         AssetDatabase.Refresh();
     }
 
@@ -27,55 +31,30 @@ public class CreateConfig
     {
         ConfigAssetBase asset = ScriptableObject.CreateInstance<T>() as ConfigAssetBase;
         string configName = asset.GetConfigName();
-        string assetPathAndName = "Assets/ConfigAsset/" + configName + ".asset";
+
+        string assetPath = Application.dataPath + "/Res/ConfigAsset/";
+        if (!Directory.Exists(assetPath))
+            Directory.CreateDirectory(assetPath);
+        string assetPathAndName = "Assets/Res/ConfigAsset/" + configName + ".asset";
         if (File.Exists(assetPathAndName))
             File.Delete(assetPathAndName);
+        string filePath = Application.dataPath + "/ConfigAsset/" + configName + ".json";
+        StreamReader sr = new StreamReader(filePath);
+        JsonData jsonData = JsonMapper.ToObject(sr.ReadToEnd());
+        sr.Close();
 
-        string filePath = Application.dataPath + "/ConfigAssetCsv/" + configName + ".csv";
-        CsvReader reader = new CsvReader(filePath, System.Text.Encoding.UTF8);
-
-        if (reader.RowCount < 1)
+        if (!((IDictionary)jsonData).Contains("config"))
         {
-            Debug.LogError("CreateConfigAsset " + configName + " reader.RowCount < 1");
+            Debug.LogError("CreateConfigAsset " + configName + " [\"config\"] is null");
             return;
         }
-        asset.ReadFromCSV(reader);
-        CreateAssetBundle(asset, assetPathAndName);
-    }
-	
-    [MenuItem("CreateAsset/CreateLanguageConfigAssets")]
-    static void CreateLanguagConfigAsset()
-    {
-        LanguageConfigAsset asset = ScriptableObject.CreateInstance<LanguageConfigAsset>() as LanguageConfigAsset;
-        asset.configs = new List<LanguageConfigAsset.LanguageConfig>();
-        string configName = "LanguageConfig";
-        string assetPathAndName = "Assets/ConfigAsset/" + configName + ".asset";
-        if (File.Exists(assetPathAndName))
-            File.Delete(assetPathAndName);
-        string filePath = Application.dataPath + "/ConfigAssetCsv/" + configName + ".csv";
-        StreamReader sr = new StreamReader(filePath, Encoding.UTF8);
-        string data = sr.ReadToEnd();
-        string[] datas = data.Split('\n');
-        for (int i = 0; i < datas.Length; i++)
-        {
-            if (datas[i] == string.Empty) continue;
-            string[] lans = datas[i].Split('|');
-            if (lans.Length > 0)
-            {
-                LanguageConfigAsset.LanguageConfig config = new LanguageConfigAsset.LanguageConfig(lans[0]);
-                for (int j = 1; j < lans.Length; j++)
-                {
-                    config.WriteLanguage((LanguageConfigAsset.LanguageType)j, lans[j]);
-                }
-                asset.configs.Add(config);
-            }
-        }
+        asset.ReadFromData(jsonData);
         CreateAssetBundle(asset, assetPathAndName);
     }
     [MenuItem("CreateAsset/AssetBundle")]
     static void BuildAssetBundle()
     {
-        if(!IsFolderExists(Application.streamingAssetsPath)) Directory.CreateDirectory(Application.streamingAssetsPath);
+        if (!IsFolderExists(Application.streamingAssetsPath)) Directory.CreateDirectory(Application.streamingAssetsPath);
         string folderAndroidPath = Application.streamingAssetsPath + "/Android";
         if (IsFolderExists(folderAndroidPath))
         {

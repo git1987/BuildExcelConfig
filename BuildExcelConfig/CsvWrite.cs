@@ -3,18 +3,19 @@ using System.Text;
 
 namespace BuildExcelConfig
 {
-    internal class CsvWrite
+    internal class CsvWrite : DataWrite
     {
-        FileStream fs;
-        StreamWriter sw;
         StringBuilder config;
-        public CsvWrite(string fileName)
+        public CsvWrite(string configName)
         {
-            string csvPath = Config.writeCsvPath + "ConfigAssetCsv/";
-            if (!Directory.Exists(csvPath))
-                Directory.CreateDirectory(csvPath);
-            fs = new FileStream(csvPath + fileName + "Config.csv", FileMode.Create);
-            sw = new StreamWriter(fs);
+            string csvPath = Config.writeDataPath + "ConfigAssetCsv/";
+            Init(csvPath, configName + "Config.csv");
+            config = new StringBuilder();
+        }
+        public CsvWrite(string configName, string path)
+        {
+            string csvPath = path;
+            Init(csvPath, configName + ".csv");
             config = new StringBuilder();
         }
 
@@ -22,12 +23,10 @@ namespace BuildExcelConfig
         {
             config.Append(content);
         }
-        public void SaveCsv()
+        public override void Save()
         {
             sw.Write(config.ToString());
-            sw.Flush();
-            sw.Close();
-            fs.Close();
+            base.Save();
         }
     }
 }

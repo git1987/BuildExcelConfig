@@ -16,3 +16,17 @@ D:\Unity\BuildExcelConfig\BuildExcelConfig\bin\Release\Excel.dll
 D:\Unity\BuildExcelConfig\BuildExcelConfig\bin\Release\ICSharpCode.SharpZipLib.dll
 D:\Unity\BuildExcelConfig\BuildExcelConfig\bin\Release\LitJson.dll
 D:\Unity\BuildExcelConfig\BuildExcelConfig\obj\Release\BuildExcelConfig.csprojResolveAssemblyReference.cache
+E:\shanggame\BuildExcelConfig\BuildExcelConfig\bin\Release\BuildExcelConfig.exe.config
+E:\shanggame\BuildExcelConfig\BuildExcelConfig\bin\Release\BuildExcelConfig.exe
+E:\shanggame\BuildExcelConfig\BuildExcelConfig\bin\Release\BuildExcelConfig.pdb
+E:\shanggame\BuildExcelConfig\BuildExcelConfig\bin\Release\Excel.dll
+E:\shanggame\BuildExcelConfig\BuildExcelConfig\bin\Release\JsonSQ.dll
+E:\shanggame\BuildExcelConfig\BuildExcelConfig\bin\Release\LitJson.dll
+E:\shanggame\BuildExcelConfig\BuildExcelConfig\bin\Release\Newtonsoft.Json.dll
+E:\shanggame\BuildExcelConfig\BuildExcelConfig\bin\Release\ICSharpCode.SharpZipLib.dll
+E:\shanggame\BuildExcelConfig\BuildExcelConfig\obj\Release\BuildExcelConfig.csproj.AssemblyReference.cache
+E:\shanggame\BuildExcelConfig\BuildExcelConfig\obj\Release\BuildExcelConfig.csproj.SuggestedBindingRedirects.cache
+E:\shanggame\BuildExcelConfig\BuildExcelConfig\obj\Release\BuildExcelConfig.csproj.CoreCompileInputs.cache
+E:\shanggame\BuildExcelConfig\BuildExcelConfig\obj\Release\BuildExcelConfig.csproj.CopyComplete
+E:\shanggame\BuildExcelConfig\BuildExcelConfig\obj\Release\BuildExcelConfig.exe
+E:\shanggame\BuildExcelConfig\BuildExcelConfig\obj\Release\BuildExcelConfig.pdb

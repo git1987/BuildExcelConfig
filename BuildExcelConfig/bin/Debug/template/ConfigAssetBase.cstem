@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// ≈‰÷√ª˘¿‡
+/// </summary>
 public abstract class ConfigAssetBase : ScriptableObject
 {
     public class ConfigAsset
@@ -7,5 +10,5 @@ public abstract class ConfigAssetBase : ScriptableObject
         public int ID;
     }
     public abstract string GetConfigName();
-    public abstract void ReadFromCSV(CsvReader reader);
+    public abstract void ReadFromData(object obj);
 }

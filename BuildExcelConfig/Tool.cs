@@ -1,5 +1,10 @@
-﻿using System.IO;
+﻿using LitJson;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace BuildExcelConfig
 {
@@ -40,6 +45,14 @@ namespace BuildExcelConfig
             string str = text.Substring(0, 1).ToLower() + text.Substring(1, text.Length - 1);
             return str;
         }
+        static public bool IsChinese(string text)
+        {
+            if (Regex.IsMatch(text, @"[\u4e00-\u9fbb]"))
+            {
+                return true;
+            }
+            return false;
+        }
 
         //public static string Normal(string json) {
         //JsonSerializer serializer = new JsonSerializer();
@@ -63,5 +76,34 @@ namespace BuildExcelConfig
         //    return str;
         //}
         //}
+
+        public static string JsonFormat(string json)
+        {
+            try
+            {
+                //JObject.ToString()方法会内部调用格式化，所以直接使用即可
+                //判读是数组还是对象
+                if (json.StartsWith("["))
+                {
+                    JArray jobj = JArray.Parse(json.Trim());
+                    return jobj.ToString();
+                }
+                else if (json.StartsWith("{"))
+                {
+                    JObject jobj = JObject.Parse(json.Trim());
+                    return jobj.ToString();
+                }
+
+            }
+            catch (System.Exception ex)
+            {
+                throw ex;
+            }
+            return json;
+        }
+        public static string JsonFormat(JsonData jsonData)
+        {
+            return JsonFormat(jsonData.ToJson());
+        }
     }
 }

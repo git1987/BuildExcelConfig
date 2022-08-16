@@ -1,0 +1,11 @@
+﻿{
+  "name": "LanguageConfig",
+  "config": [
+    {
+      "key": "test",
+      "zh": "测试",
+      "en": "test",
+      "jp": "ceshi"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "read": {
+    "excel": "E:/shanggame/BuildExcelConfig/BuildExcelConfig/bin/Release/excel/",
+    "template": "E:/shanggame/BuildExcelConfig/BuildExcelConfig/bin/Release/template/"
+  },
+  "write": {
+    "data": "E:/shanggame/BuildExcelConfig/BuildExcelConfig/bin/Release/data/",
+    "script": "E:/shanggame/BuildExcelConfig/BuildExcelConfig/bin/Release/ConfigScript/"
+  }
+}

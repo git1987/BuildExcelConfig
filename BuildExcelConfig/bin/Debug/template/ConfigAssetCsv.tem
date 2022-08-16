@@ -1,7 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using LitJson;
 
+/// <summary>
+/// Csv表格数据类
+/// </summary>
 public class #{ClassName}ConfigAsset : ConfigAssetBase
 {
     [System.Serializable]
@@ -10,7 +14,7 @@ public class #{ClassName}ConfigAsset : ConfigAssetBase
 #if !List
         #{typeName} #{variableName};
 #endif
-        public void Init(ArrayList list)
+        public void Init(JsonData jd)
         {
 #if !List
             #{variableName} = #{assignment};
@@ -32,8 +36,9 @@ public class #{ClassName}ConfigAsset : ConfigAssetBase
                 configsDictionary.Add(configs[i].ID, configs[i]);
         }
     }
-    public override void ReadFromCSV(CsvReader reader)
+    public override void ReadFromData(object obj)
     {
+        CsvReader reader = obj as CsvReader;
         configs = new List<#{ClassName}Config>();
         for (int i = 1; i < reader.RowCount + 1; i++)
         {

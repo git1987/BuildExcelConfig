@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
-
+/// <summary>
+/// 获取配置的单例类
+/// </summary>
 public class ConfigAssetsData : MonoBehaviour
 {
     static private ConfigAssetsData configAssetsDate;
@@ -28,32 +30,47 @@ public class ConfigAssetsData : MonoBehaviour
 #elif UNITY_STANDALONE_OSX
         Application.streamingAssetsPath +"/IOS/";
 #elif UNITY_IOS
-       Application.streamingAssetsPath +"/IOS/";
+        Application.streamingAssetsPath +"/IOS/";
 #elif UNITY_STANDALONE_WIN
- Application.streamingAssetsPath + "/Windows/";
+        Application.streamingAssetsPath + "/Windows/";
 #endif
         ab = AssetBundle.LoadFromFile(streamingFilePath + "/config");
 #if !List
         _#{className}ConfigAsset = ab.LoadAsset<#{ClassName}ConfigAsset>(typeof(#{ClassName}ConfigAsset.#{ClassName}Config).Name);
-        _#{className}ConfigAsset.ReadList();
+        if(_#{className}ConfigAsset != null)
+            _#{className}ConfigAsset.ReadList();
 #endif
         _languageData = ab.LoadAsset<LanguageConfigAsset>(typeof(LanguageConfigAsset.LanguageConfig).Name);
-        _languageData.ReadList();
+        if(_languageData != null)
+            _languageData.ReadList();
         initFinish = true;
         ab.Unload(false);
     }
-    public string GetLanguageText(string baseLanguage)
+    public string GetLanguageText(string languageKey)
     {
-        string text = languageData.configsDictionary[baseLanguage].GetLanguageText(languageType);
-        return text;
+        if(language != null && language.languageConfigAsset.configsDictionary.ContainsKey(key))
+            return language.GetLanguageText(languageKey);
+        if(languageData != null && languageData.languageConfigAsset.configsDictionary.ContainsKey(key))
+            return languageData.GetLanguageText(languageKey);
+        return languageKey;
     }
-    private LanguageConfigAsset _languageData;
-    public LanguageConfigAsset languageData
+    private LanguageConfigAsset _language;
+    public LanguageConfigAsset language
+    {
+        get
+        {
+            if (_language == null)
+                Debug.LogError("没有初始化LanguageConfigAsset AssetBundle");
+            return _language;
+        }
+    }
+    private LanguageDataConfigAsset _languageData;
+    public LanguageDataConfigAsset languageData
     {
         get
         {
             if (_languageData == null)
-                Debug.LogError("没有初始化AssetBundle");
+                Debug.LogError("没有初始化LanguageDataConfigAsset AssetBundle");
             return _languageData;
         }
     }
@@ -64,7 +81,7 @@ public class ConfigAssetsData : MonoBehaviour
         get
         {
             if (_#{className}ConfigAsset == null)
-                Debug.LogError("没有初始化AssetBundle");
+                Debug.LogError("没有初始化#{ClassName} AssetBundle");
             return _#{className}ConfigAsset;
         }
     }
