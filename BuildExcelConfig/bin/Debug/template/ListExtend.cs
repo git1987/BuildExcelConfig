@@ -17,7 +17,7 @@ public static class ListExtend
             {
                 t = (T)Convert.ChangeType(strs[i], typeof(T));
             }
-            catch (Exception e)
+            catch
             {
                 UnityEngine.Debug.Log(str[i] + "don't as :" + default(T).GetType());
                 return new List<T>();
@@ -42,7 +42,7 @@ public static class ListExtend
             {
                 t = (T)Convert.ChangeType(strs[i], typeof(T));
             }
-            catch (Exception e)
+            catch
             {
                 UnityEngine.Debug.Log(jsonData.ToString()[i] + "don't as :" + default(T).GetType());
                 return new List<T>();
