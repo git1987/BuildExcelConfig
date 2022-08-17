@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// ÅäÖÃ»ùÀà
+/// é…ç½®åŸºç±»
 /// </summary>
 public abstract class ConfigAssetBase : ScriptableObject
 {
