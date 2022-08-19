@@ -26,7 +26,7 @@ public static class ListExtend
         }
         return list;
     }
-    public static List<T> ToJsonData<T>(this JsonData jsonData)
+    public static List<T> ToList<T>(this JsonData jsonData)
     {
         List<T> list = new List<T>();
         string str = jsonData.ToString();
