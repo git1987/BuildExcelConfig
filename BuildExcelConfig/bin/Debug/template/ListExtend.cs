@@ -26,7 +26,7 @@ public static class ListExtend
         }
         return list;
     }
-    public static List<T> ToJsonData<T>(this JsonData jsonData)
+    public static List<T> ToList<T>(this JsonData jsonData)
     {
         List<T> list = new List<T>();
         string str = jsonData.ToString();
@@ -40,7 +40,14 @@ public static class ListExtend
             T t = default(T);
             try
             {
-                t = (T)Convert.ChangeType(strs[i], typeof(T));
+                if (typeof(T).IsEnum)
+                {
+                    t = (T)System.Enum.Parse(typeof(T), strs[i]);
+                }
+                else
+                {
+                    t = (T)Convert.ChangeType(strs[i], typeof(T));
+                }
             }
             catch (Exception e)
             {
