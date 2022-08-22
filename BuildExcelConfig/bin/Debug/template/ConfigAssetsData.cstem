@@ -57,6 +57,7 @@ public class ConfigAssetsData : MonoBehaviour
     }
     public string GetLanguageText(string languageKey)
     {
+        if (languageKey.IndexOf("language_") == -1) return languageKey;
         if (languageConfigAsset != null)
             return languageConfigAsset.GetLanguageText(languageKey);
         if (languageDataConfigAsset != null)
