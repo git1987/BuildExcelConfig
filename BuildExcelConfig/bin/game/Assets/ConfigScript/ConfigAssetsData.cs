@@ -37,7 +37,7 @@ public class ConfigAssetsData : MonoBehaviour
 #if !UNITY_EDITOR
         ab = AssetBundle.LoadFromFile(streamingFilePath + "/config");
 #endif
-        _languageConfigAsset = GetConfigAsset<LanguageConfigAsset, LanguageConfigAsset.LanguageConfig>();        _languageDataConfigAsset = GetConfigAsset<LanguageDataConfigAsset, LanguageDataConfigAsset.LanguageDataConfig>();        _languageConfigAsset = GetConfigAsset<LanguageConfigAsset, LanguageConfigAsset.LanguageConfig>();        _languageDataConfigAsset = GetConfigAsset<LanguageDataConfigAsset, LanguageDataConfigAsset.LanguageDataConfig>();
+        _languageConfigAsset = GetConfigAsset<LanguageConfigAsset, LanguageConfigAsset.LanguageConfig>();        _languageDataConfigAsset = GetConfigAsset<LanguageDataConfigAsset, LanguageDataConfigAsset.LanguageDataConfig>();
         initFinish = true;
 #if !UNITY_EDITOR
         ab.Unload(false);
@@ -55,11 +55,12 @@ public class ConfigAssetsData : MonoBehaviour
     }
     public string GetLanguageText(string languageKey)
     {
+        if (languageKey.IndexOf("language_") == -1) return languageKey;
         if (languageConfigAsset != null)
             return languageConfigAsset.GetLanguageText(languageKey);
         if (languageDataConfigAsset != null)
             return languageDataConfigAsset.GetLanguageText(languageKey);
         return languageKey;
     }
-    private LanguageConfigAsset _languageConfigAsset;    public LanguageConfigAsset languageConfigAsset    {        get        {            if (_languageConfigAsset == null)                Debug.LogError("没有初始化Language AssetBundle");            return _languageConfigAsset;        }    }    private LanguageDataConfigAsset _languageDataConfigAsset;    public LanguageDataConfigAsset languageDataConfigAsset    {        get        {            if (_languageDataConfigAsset == null)                Debug.LogError("没有初始化LanguageData AssetBundle");            return _languageDataConfigAsset;        }    }    private LanguageConfigAsset _languageConfigAsset;    public LanguageConfigAsset languageConfigAsset    {        get        {            if (_languageConfigAsset == null)                Debug.LogError("没有初始化Language AssetBundle");            return _languageConfigAsset;        }    }    private LanguageDataConfigAsset _languageDataConfigAsset;    public LanguageDataConfigAsset languageDataConfigAsset    {        get        {            if (_languageDataConfigAsset == null)                Debug.LogError("没有初始化LanguageData AssetBundle");            return _languageDataConfigAsset;        }    }
+    private LanguageConfigAsset _languageConfigAsset;    public LanguageConfigAsset languageConfigAsset    {        get        {            if (_languageConfigAsset == null)                Debug.LogError("没有初始化Language AssetBundle");            return _languageConfigAsset;        }    }    private LanguageDataConfigAsset _languageDataConfigAsset;    public LanguageDataConfigAsset languageDataConfigAsset    {        get        {            if (_languageDataConfigAsset == null)                Debug.LogError("没有初始化LanguageData AssetBundle");            return _languageDataConfigAsset;        }    }
 }
