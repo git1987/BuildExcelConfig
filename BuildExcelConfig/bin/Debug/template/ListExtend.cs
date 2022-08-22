@@ -17,7 +17,7 @@ public static class ListExtend
             {
                 t = (T)Convert.ChangeType(strs[i], typeof(T));
             }
-            catch
+            catch (Exception e)
             {
                 UnityEngine.Debug.Log(str[i] + "don't as :" + default(T).GetType());
                 return new List<T>();
@@ -26,7 +26,7 @@ public static class ListExtend
         }
         return list;
     }
-    public static List<T> ToList<T>(this JsonData jsonData)
+    public static List<T> ToJsonData<T>(this JsonData jsonData)
     {
         List<T> list = new List<T>();
         string str = jsonData.ToString();
@@ -42,7 +42,7 @@ public static class ListExtend
             {
                 t = (T)Convert.ChangeType(strs[i], typeof(T));
             }
-            catch
+            catch (Exception e)
             {
                 UnityEngine.Debug.Log(jsonData.ToString()[i] + "don't as :" + default(T).GetType());
                 return new List<T>();

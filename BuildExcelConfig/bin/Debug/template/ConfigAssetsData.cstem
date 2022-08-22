@@ -34,14 +34,26 @@ public class ConfigAssetsData : MonoBehaviour
 #elif UNITY_STANDALONE_WIN
         Application.streamingAssetsPath + "/Windows/";
 #endif
+#if !UNITY_EDITOR
         ab = AssetBundle.LoadFromFile(streamingFilePath + "/config");
+#endif
 #if !List
-        _#{className}ConfigAsset = ab.LoadAsset<#{ClassName}ConfigAsset>(typeof(#{ClassName}ConfigAsset.#{ClassName}Config).Name);
-        if(_#{className}ConfigAsset != null)
-            _#{className}ConfigAsset.ReadList();
+        _#{className}ConfigAsset = GetConfigAsset<#{ClassName}ConfigAsset, #{ClassName}ConfigAsset.#{ClassName}Config>();
 #endif
         initFinish = true;
+#if !UNITY_EDITOR
         ab.Unload(false);
+#endif
+    }
+    T GetConfigAsset<T, V>() where T : ConfigAssetBase
+    {
+#if UNITY_EDITOR
+        T asset = UnityEditor.AssetDatabase.LoadAssetAtPath<T>(string.Format("Assets/Res/ConfigAsset/{0}.asset", typeof(V).Name));
+#else
+        T asset = ab.LoadAsset<T>(typeof(V).Name);
+#endif
+        if (asset != null) asset.ReadList();
+        return asset;
     }
     public string GetLanguageText(string languageKey)
     {

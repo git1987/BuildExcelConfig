@@ -186,7 +186,7 @@ namespace BuildExcelConfig
                             }
                             else if (variableTypeList[k].ToLower().IndexOf("list") >= 0)
                             {
-                                str.Append(string.Format(".ToList{0}()", variableTypeList[k].Substring(4)));
+                                str.Append(string.Format(".ToJsonData{0}()", variableTypeList[k].Substring(4)));
                             }
                             else
                             {
