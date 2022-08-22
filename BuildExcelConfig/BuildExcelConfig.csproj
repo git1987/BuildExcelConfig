@@ -54,8 +54,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
+    <Compile Include="ConfigEnum.cs" />
     <Compile Include="CsvWrite.cs" />
     <Compile Include="DataWrite.cs" />
+    <Compile Include="ExtendClass.cs" />
     <Compile Include="JsonWrite.cs" />
     <Compile Include="LanguageData.cs" />
     <Compile Include="Program.cs" />

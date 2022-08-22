@@ -93,8 +93,10 @@ namespace BuildExcelConfig
             classNameList.Add(fileName);
             className = _fileName + "ConfigAsset";
         }
-        public void Append(string content, int type)
+        public void Append(int type, string content)
         {
+            if (content == null)
+                content = "";
             switch ((StringType)type)
             {
                 case StringType.variableName:
@@ -187,6 +189,11 @@ namespace BuildExcelConfig
                             else if (variableTypeList[k].ToLower().IndexOf("list") >= 0)
                             {
                                 str.Append(string.Format(".ToJsonData{0}()", variableTypeList[k].Substring(4)));
+                            }
+                            else if (variableTypeList[k].ToLower().IndexOf("enum_") >= 0)
+                            {
+                                //自定义枚举
+                                str = new StringBuilder(string.Format("({0})System.Enum.Parse(typeof({0}), jd[\"{1}\"].ToString() == \"\" ? \"None\" : jd[\"{1}\"].ToString())", variableTypeList[k], variableNameList[k]));
                             }
                             else
                             {

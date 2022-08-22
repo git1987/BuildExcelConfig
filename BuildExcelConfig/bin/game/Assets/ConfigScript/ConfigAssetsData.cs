@@ -34,10 +34,24 @@ public class ConfigAssetsData : MonoBehaviour
 #elif UNITY_STANDALONE_WIN
         Application.streamingAssetsPath + "/Windows/";
 #endif
+#if !UNITY_EDITOR
         ab = AssetBundle.LoadFromFile(streamingFilePath + "/config");
-        _languageConfigAsset = ab.LoadAsset<LanguageConfigAsset>(typeof(LanguageConfigAsset.LanguageConfig).Name);        if(_languageConfigAsset != null)            _languageConfigAsset.ReadList();        _languageDataConfigAsset = ab.LoadAsset<LanguageDataConfigAsset>(typeof(LanguageDataConfigAsset.LanguageDataConfig).Name);        if(_languageDataConfigAsset != null)            _languageDataConfigAsset.ReadList();
+#endif
+        _heroInfoConfigAsset = GetConfigAsset<HeroInfoConfigAsset, HeroInfoConfigAsset.HeroInfoConfig>();        _heroPropsConfigAsset = GetConfigAsset<HeroPropsConfigAsset, HeroPropsConfigAsset.HeroPropsConfig>();        _languageConfigAsset = GetConfigAsset<LanguageConfigAsset, LanguageConfigAsset.LanguageConfig>();        _languageDataConfigAsset = GetConfigAsset<LanguageDataConfigAsset, LanguageDataConfigAsset.LanguageDataConfig>();
         initFinish = true;
+#if !UNITY_EDITOR
         ab.Unload(false);
+#endif
+    }
+    T GetConfigAsset<T, V>() where T : ConfigAssetBase
+    {
+#if UNITY_EDITOR
+        T asset = UnityEditor.AssetDatabase.LoadAssetAtPath<T>(string.Format("Assets/Res/ConfigAsset/{0}.asset", typeof(V).Name));
+#else
+        T asset = ab.LoadAsset<T>(typeof(V).Name);
+#endif
+        if (asset != null) asset.ReadList();
+        return asset;
     }
     public string GetLanguageText(string languageKey)
     {
@@ -47,5 +61,5 @@ public class ConfigAssetsData : MonoBehaviour
             return languageDataConfigAsset.GetLanguageText(languageKey);
         return languageKey;
     }
-    private LanguageConfigAsset _languageConfigAsset;    public LanguageConfigAsset languageConfigAsset    {        get        {            if (_languageConfigAsset == null)                Debug.LogError("没有初始化Language AssetBundle");            return _languageConfigAsset;        }    }    private LanguageDataConfigAsset _languageDataConfigAsset;    public LanguageDataConfigAsset languageDataConfigAsset    {        get        {            if (_languageDataConfigAsset == null)                Debug.LogError("没有初始化LanguageData AssetBundle");            return _languageDataConfigAsset;        }    }
+    private HeroInfoConfigAsset _heroInfoConfigAsset;    public HeroInfoConfigAsset heroInfoConfigAsset    {        get        {            if (_heroInfoConfigAsset == null)                Debug.LogError("没有初始化HeroInfo AssetBundle");            return _heroInfoConfigAsset;        }    }    private HeroPropsConfigAsset _heroPropsConfigAsset;    public HeroPropsConfigAsset heroPropsConfigAsset    {        get        {            if (_heroPropsConfigAsset == null)                Debug.LogError("没有初始化HeroProps AssetBundle");            return _heroPropsConfigAsset;        }    }    private LanguageConfigAsset _languageConfigAsset;    public LanguageConfigAsset languageConfigAsset    {        get        {            if (_languageConfigAsset == null)                Debug.LogError("没有初始化Language AssetBundle");            return _languageConfigAsset;        }    }    private LanguageDataConfigAsset _languageDataConfigAsset;    public LanguageDataConfigAsset languageDataConfigAsset    {        get        {            if (_languageDataConfigAsset == null)                Debug.LogError("没有初始化LanguageData AssetBundle");            return _languageDataConfigAsset;        }    }
 }

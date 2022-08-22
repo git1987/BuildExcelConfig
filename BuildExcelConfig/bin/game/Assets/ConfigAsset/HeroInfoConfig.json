@@ -1,0 +1,27 @@
+﻿{
+  "name": "HeroInfoConfig",
+  "config": [
+    {
+      "ID": "101",
+      "id": "101",
+      "heroName": "剑客",
+      "heroDesc": "女人，只会让我出剑变慢。",
+      "heroRes": "hero_knight",
+      "heroType": "moveable",
+      "defaultSkill": "10001",
+      "ultSkill": "10002",
+      "passiveSkill": "0"
+    },
+    {
+      "ID": "102",
+      "id": "102",
+      "heroName": "侦探",
+      "heroDesc": "真相只有一个。",
+      "heroRes": "hero_detective",
+      "heroType": "standby",
+      "defaultSkill": "10003",
+      "ultSkill": "10004",
+      "passiveSkill": "0"
+    }
+  ]
+}

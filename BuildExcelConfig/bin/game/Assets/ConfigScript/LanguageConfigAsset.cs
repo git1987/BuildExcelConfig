@@ -60,7 +60,7 @@ public class LanguageConfigAsset : ConfigAssetBase
             return key;
         }
     }
-    public void ReadList()
+    public override void ReadList()
     {
         configsDictionary = new Dictionary<string, LanguageConfig>();
         for (int i = 0; i < configs.Count; i++)

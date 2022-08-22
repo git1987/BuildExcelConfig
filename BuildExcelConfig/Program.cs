@@ -28,7 +28,7 @@ namespace BuildExcelConfig
             {
                 Console.WriteLine("是否使用翻译配置(yes/no)=====>配置路径：" + Config.readExcelPath);
                 string input = Console.ReadLine();
-                Console.WriteLine("开始导出配置：" + input.ToLower() == "yes"|| input.ToLower() == "y" ? "导出翻译" : "");
+                Console.WriteLine("开始导出配置：" + input.ToLower() == "yes" || input.ToLower() == "y" ? "导出翻译" : "");
                 Config.RefreshFolder();
                 AllExcel(input.ToLower() == "yes" || input.ToLower() == "y");
                 Console.WriteLine("导出配置、创建scprite脚本文件==>完成");
@@ -56,15 +56,62 @@ namespace BuildExcelConfig
             foreach (FileInfo file in dir.GetFiles("*.xlsx"))
             {
                 Console.WriteLine(file.Name);
-                //if (file.Name == "Language.xlsx")
-                //{
-                //    //导出翻译配置
-                //}
-                //else
-                classNameList.Add(ReadExcel(file.FullName, languageDatas));
+                if (file.Name.ToLower().IndexOf("enum") > -1)
+                {
+                    ReadEnumExcel(file.FullName);
+                }
+                else
+                {
+                    classNameList.Add(ReadExcel(file.FullName, languageDatas));
+                }
             }
             if (useLanguage)
                 LanguageData.Save(languageDatas);
+        }
+        //读取枚举的excel
+        static void ReadEnumExcel(string excelPath)
+        {
+            FileStream fileStream = File.Open(excelPath, FileMode.Open, FileAccess.Read);
+            IExcelDataReader excelReader = ExcelReaderFactory.CreateOpenXmlReader(fileStream);
+            string currentName = string.Empty;
+            ConfigEnum ce = new ConfigEnum();
+            do
+            {
+                if (excelReader.Name != "enum")
+                    continue;
+                //excelReader.Name：sheet名称
+                int index = 0;
+                while (excelReader.Read())
+                {
+                    //数据起点
+                    int dataIndex = 2 - 1;
+                    //读取每行的内容
+                    if (index < dataIndex)
+                    {
+                    }
+                    else
+                    {
+                        //枚举名称
+                        string enumName = excelReader.GetString(0);
+                        //枚举注释
+                        string enumNameSummary;
+                        if (enumName != null && enumName != string.Empty && currentName != enumName)
+                        {
+                            currentName = excelReader.GetString(0);
+                            enumNameSummary = excelReader.GetString(1);
+                            ce.AddEnumSummary(currentName, enumNameSummary);
+                        }
+                        //枚举值名称
+                        string enumValueName = excelReader.GetString(2);
+                        //枚举值注释
+                        string enumValueNameSummary = excelReader.GetString(3);
+                        int? enumValue = excelReader.GetString(4).ToIntOrNull();
+                        ce.AddEnum(currentName, enumValueName, enumValue, enumValueNameSummary);
+                    }
+                    index++;
+                }
+            } while (excelReader.NextResult());
+            ce.Save(Config.currentPath + "excel/Config_Enum.cs");
         }
 
         static List<string> ReadExcel(string excelPath, Dictionary<string, string> languageDatas)
@@ -96,7 +143,7 @@ namespace BuildExcelConfig
                         for (int i = 0; i < excelReader.FieldCount; i++)
                         {
                             if (excelReader.GetString(i) == null || excelReader.GetString(i) == string.Empty) break;
-                            script.Append(excelReader.GetString(i), index);
+                            script.Append(index, excelReader.GetString(i));
                         }
                     }
                     else

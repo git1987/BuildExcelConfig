@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// ���û���
+/// 配置基类
 /// </summary>
 public abstract class ConfigAssetBase : ScriptableObject
 {
@@ -11,4 +11,5 @@ public abstract class ConfigAssetBase : ScriptableObject
     }
     public abstract string GetConfigName();
     public abstract void ReadFromData(object obj);
+    public abstract void ReadList();
 }
