@@ -19,7 +19,7 @@ public static class ListExtend
             }
             catch (Exception e)
             {
-                UnityEngine.Debug.Log(str[i] + "don't as :" + default(T).GetType());
+                UnityEngine.Debug.LogErrorFormat("[{0}] don't as [{1}]:{2}", str[i], default(T).GetType(), e.Message);
                 return new List<T>();
             }
             list.Add(t);
@@ -51,7 +51,7 @@ public static class ListExtend
             }
             catch (Exception e)
             {
-                UnityEngine.Debug.Log(jsonData.ToString()[i] + "don't as :" + default(T).GetType());
+                UnityEngine.Debug.LogErrorFormat("[{0}] don't as [{1}]:{2}", jsonData.ToString()[i], default(T).GetType(), e.Message);
                 return new List<T>();
             }
             list.Add(t);
