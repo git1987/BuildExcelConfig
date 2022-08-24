@@ -97,7 +97,7 @@ namespace BuildExcelConfig
             StringBuilder sb;
             if (enumSummary.ContainsKey(enumName))
             {
-                string str = string.Format("/// <summary>\n/// {0}\n/// <summary>\n", enumSummary[enumName]);
+                string str = string.Format("/// <summary>\n/// {0}\n/// </summary>\n", enumSummary[enumName]);
                 sb = new StringBuilder(str);
             }
             else
