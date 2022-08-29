@@ -1,6 +1,6 @@
 /// <summary>
 /// 测试枚举
-/// <summary>
+/// </summary>
 public enum Enum_Test {
 	None = -1,
 	/*test1*/

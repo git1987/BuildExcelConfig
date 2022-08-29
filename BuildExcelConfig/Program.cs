@@ -146,7 +146,15 @@ namespace BuildExcelConfig
                         //第一行至第三行生成配置类 第四行是多语言
                         for (int i = 0; i < excelReader.FieldCount; i++)
                         {
-                            if (excelReader.GetString(i) == null || excelReader.GetString(i) == string.Empty) break;
+                            if (i == 0 || i == 1)
+                            {
+                                if (excelReader.GetString(i) == null || excelReader.GetString(i) == string.Empty)
+                                {
+
+                                    Console.WriteLine("变量名称或者变量类型为空！！！");
+                                    break;
+                                }
+                            }
                             script.Append(index, excelReader.GetString(i));
                         }
                     }
