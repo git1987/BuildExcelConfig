@@ -106,6 +106,10 @@ namespace BuildExcelConfig
                         //枚举值注释
                         string enumValueNameSummary = excelReader.GetString(3);
                         int? enumValue = excelReader.GetString(4).ToIntOrNull();
+                        if (enumValueName == null)
+                        {
+                            continue;
+                        }
                         ce.AddEnum(currentName, enumValueName, enumValue, enumValueNameSummary);
                     }
                     index++;
