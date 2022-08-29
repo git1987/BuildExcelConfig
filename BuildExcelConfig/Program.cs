@@ -151,9 +151,9 @@ namespace BuildExcelConfig
                                 if (excelReader.GetString(i) == null || excelReader.GetString(i) == string.Empty)
                                 {
                                     if (i == 0)
-                                        Console.WriteLine(sheetName + "第一个变量名称为空！！！！！！");
+                                        Console.WriteLine(sheetName + "====>第一个变量名称为空！！");
                                     else
-                                        Console.WriteLine("变量名称为空！！！前一个变量名成为：" + excelReader.GetString(i - 1));
+                                        Console.WriteLine(sheetName + "====>有空的变量名称！！前一个变量名成为：" + excelReader.GetString(i - 1));
                                     break;
                                 }
                             }
@@ -161,10 +161,7 @@ namespace BuildExcelConfig
                             {
                                 if (excelReader.GetString(i) == null || excelReader.GetString(i) == string.Empty)
                                 {
-                                    if (i == 0)
-                                        Console.WriteLine(sheetName + "第一个变量类型为空！！！！！！");
-                                    else
-                                        Console.WriteLine("变量类型为空！！！前一个变量名成为：" + excelReader.GetString(i - 1));
+                                    Console.WriteLine(sheetName + "====>有空的变量类型！！！！！！");
                                     break;
                                 }
                             }
