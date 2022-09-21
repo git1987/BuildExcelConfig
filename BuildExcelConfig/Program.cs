@@ -55,14 +55,17 @@ namespace BuildExcelConfig
                 languageDatas = new Dictionary<string, string>();
             foreach (FileInfo file in dir.GetFiles("*.xlsx"))
             {
-                Console.WriteLine(file.Name);
-                if (file.Name.ToLower().IndexOf("enum") > -1)
+                if (file.Name.IndexOf("$") == -1)
                 {
-                    ReadEnumExcel(file.FullName);
-                }
-                else
-                {
-                    classNameList.Add(ReadExcel(file.FullName, languageDatas));
+                    Console.WriteLine(file.Name);
+                    if (file.Name.ToLower().IndexOf("enum") > -1)
+                    {
+                        ReadEnumExcel(file.FullName);
+                    }
+                    else
+                    {
+                        classNameList.Add(ReadExcel(file.FullName, languageDatas));
+                    }
                 }
             }
             if (useLanguage)
@@ -71,159 +74,163 @@ namespace BuildExcelConfig
         //读取枚举的excel
         static void ReadEnumExcel(string excelPath)
         {
-            FileStream fileStream = File.Open(excelPath, FileMode.Open, FileAccess.Read);
-            IExcelDataReader excelReader = ExcelReaderFactory.CreateOpenXmlReader(fileStream);
-            string currentName = string.Empty;
-            ConfigEnum ce = new ConfigEnum();
-            do
+            using (FileStream fileStream = File.Open(excelPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                if (excelReader.Name != "enum")
-                    continue;
-                //excelReader.Name：sheet名称
-                int index = 0;
-                while (excelReader.Read())
+                IExcelDataReader excelReader = ExcelReaderFactory.CreateOpenXmlReader(fileStream);
+                string currentName = string.Empty;
+                ConfigEnum ce = new ConfigEnum();
+                do
                 {
-                    //数据起点
-                    int dataIndex = 2 - 1;
-                    //读取每行的内容
-                    if (index < dataIndex)
+                    if (excelReader.Name != "enum")
+                        continue;
+                    //excelReader.Name：sheet名称
+                    int index = 0;
+                    while (excelReader.Read())
                     {
-                    }
-                    else
-                    {
-                        //枚举名称
-                        string enumName = excelReader.GetString(0);
-                        //枚举注释
-                        string enumNameSummary;
-                        if (enumName != null && enumName != string.Empty && currentName != enumName)
+                        //数据起点
+                        int dataIndex = 2 - 1;
+                        //读取每行的内容
+                        if (index < dataIndex)
                         {
-                            currentName = excelReader.GetString(0);
-                            enumNameSummary = excelReader.GetString(1);
-                            ce.AddEnumSummary(currentName, enumNameSummary);
                         }
-                        //枚举值名称
-                        string enumValueName = excelReader.GetString(2);
-                        //枚举值注释
-                        string enumValueNameSummary = excelReader.GetString(3);
-                        int? enumValue = excelReader.GetString(4).ToIntOrNull();
-                        if (enumValueName == null)
+                        else
                         {
-                            continue;
+                            //枚举名称
+                            string enumName = excelReader.GetString(0);
+                            //枚举注释
+                            string enumNameSummary;
+                            if (enumName != null && enumName != string.Empty && currentName != enumName)
+                            {
+                                currentName = excelReader.GetString(0);
+                                enumNameSummary = excelReader.GetString(1);
+                                ce.AddEnumSummary(currentName, enumNameSummary);
+                            }
+                            //枚举值名称
+                            string enumValueName = excelReader.GetString(2);
+                            //枚举值注释
+                            string enumValueNameSummary = excelReader.GetString(3);
+                            int? enumValue = excelReader.GetString(4).ToIntOrNull();
+                            if (enumValueName == null)
+                            {
+                                continue;
+                            }
+                            ce.AddEnum(currentName, enumValueName, enumValue, enumValueNameSummary);
                         }
-                        ce.AddEnum(currentName, enumValueName, enumValue, enumValueNameSummary);
+                        index++;
                     }
-                    index++;
-                }
-            } while (excelReader.NextResult());
-            ce.Save(Config.currentPath + "excel/Config_Enum.cs");
+                } while (excelReader.NextResult());
+                ce.Save(Config.currentPath + "excel/Config_Enum.cs");
+            }
         }
 
         static List<string> ReadExcel(string excelPath, Dictionary<string, string> languageDatas)
         {
-            FileStream fileStream = File.Open(excelPath, FileMode.Open, FileAccess.Read);
-            IExcelDataReader excelReader = ExcelReaderFactory.CreateOpenXmlReader(fileStream);
             List<string> nameList = new List<string>();
-            do
+            using (FileStream fileStream = File.Open(excelPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                if (excelReader.Name.ToLower().IndexOf("log") > -1
-                    || excelReader.Name.ToLower().IndexOf("Sheet") > -1
-                    || Tool.IsChinese(excelReader.Name))
-                    continue;
-                //excelReader.Name：sheet名称
-                string sheetName = Tool.LowerToUpper(excelReader.Name, true);
-                int index = 0;
-                //CsvWrite csv = new CsvWrite(fileName);
-                JsonWrite jsonConfig = new JsonWrite(sheetName);
-                ScriptWrite script = new ScriptWrite(sheetName);
-                nameList.Add(sheetName);
-                while (excelReader.Read())
+                IExcelDataReader excelReader = ExcelReaderFactory.CreateOpenXmlReader(fileStream);
+                do
                 {
-                    //数据起点
-                    int dataIndex = 5 - 1;
-                    //读取每行的内容
-                    if (index < dataIndex)
+                    if (excelReader.Name.ToLower().IndexOf("log") > -1
+                        || excelReader.Name.ToLower().IndexOf("Sheet") > -1
+                        || Tool.IsChinese(excelReader.Name))
+                        continue;
+                    //excelReader.Name：sheet名称
+                    string sheetName = Tool.LowerToUpper(excelReader.Name, true);
+                    int index = 0;
+                    //CsvWrite csv = new CsvWrite(fileName);
+                    JsonWrite jsonConfig = new JsonWrite(sheetName);
+                    ScriptWrite script = new ScriptWrite(sheetName);
+                    nameList.Add(sheetName);
+                    while (excelReader.Read())
                     {
-                        //第一行至第三行生成配置类 第四行是多语言
-                        for (int i = 0; i < excelReader.FieldCount; i++)
+                        //数据起点
+                        int dataIndex = 5 - 1;
+                        //读取每行的内容
+                        if (index < dataIndex)
                         {
-                            if (index == 0)
+                            //第一行至第三行生成配置类 第四行是多语言
+                            for (int i = 0; i < excelReader.FieldCount; i++)
                             {
+                                if (index == 0)
+                                {
+                                    if (excelReader.GetString(i) == null || excelReader.GetString(i) == string.Empty)
+                                    {
+                                        if (i == 0)
+                                            Console.WriteLine(sheetName + "====>第一个变量名称为空！！");
+                                        else
+                                            Console.WriteLine(sheetName + "====>有空的变量名称！！前一个变量名成为：" + excelReader.GetString(i - 1));
+                                        break;
+                                    }
+                                }
+                                else if (index == 1)
+                                {
+                                    if (excelReader.GetString(i) == null || excelReader.GetString(i) == string.Empty)
+                                    {
+                                        Console.WriteLine(sheetName + "====>有空的变量类型！！！！！！");
+                                        break;
+                                    }
+                                }
+                                else if (i >= script.variableNameList.Count)
+                                {
+                                    break;
+                                }
+                                script.Append(index, excelReader.GetString(i));
+                            }
+                        }
+                        else
+                        {
+                            //从第四行开始储存配置：根据变量名长度
+                            for (int i = 0; i < script.variableNameList.Count; i++)
+                            {
+                                //从第一列开始遍历内容
                                 if (excelReader.GetString(i) == null || excelReader.GetString(i) == string.Empty)
                                 {
-                                    if (i == 0)
-                                        Console.WriteLine(sheetName + "====>第一个变量名称为空！！");
+                                    //ID值为空
+                                    if (i == 0) break;
+                                }
+                                //内容
+                                string content = excelReader.GetString(i);
+                                if (languageDatas != null && script.languageList[i])
+                                {
+                                    //判断是否在翻译配置
+                                    //language_sheetName_变量名_id
+                                    string key = string.Format("language_{0}_{1}_{2}", sheetName, script.variableNameList[i], excelReader.GetString(0));
+                                    if (languageDatas.ContainsKey(key))
+                                        Console.WriteLine("====>翻译有相同的Key：" + key);
                                     else
-                                        Console.WriteLine(sheetName + "====>有空的变量名称！！前一个变量名成为：" + excelReader.GetString(i - 1));
-                                    break;
-                                }
-                            }
-                            else if (index == 1)
-                            {
-                                if (excelReader.GetString(i) == null || excelReader.GetString(i) == string.Empty)
-                                {
-                                    Console.WriteLine(sheetName + "====>有空的变量类型！！！！！！");
-                                    break;
-                                }
-                            }
-                            else if (i >= script.variableNameList.Count)
-                            {
-                                break;
-                            }
-                            script.Append(index, excelReader.GetString(i));
-                        }
-                    }
-                    else
-                    {
-                        //从第四行开始储存配置：根据变量名长度
-                        for (int i = 0; i < script.variableNameList.Count; i++)
-                        {
-                            //从第一列开始遍历内容
-                            if (excelReader.GetString(i) == null || excelReader.GetString(i) == string.Empty)
-                            {
-                                //ID值为空
-                                if (i == 0) break;
-                            }
-                            //内容
-                            string content = excelReader.GetString(i);
-                            if (languageDatas != null && script.languageList[i])
-                            {
-                                //判断是否在翻译配置
-                                //language_sheetName_变量名_id
-                                string key = string.Format("language_{0}_{1}_{2}", sheetName, script.variableNameList[i], excelReader.GetString(0));
-                                if (languageDatas.ContainsKey(key))
-                                    Console.WriteLine("====>翻译有相同的Key：" + key);
-                                else
-                                    languageDatas.Add(key, content);
-                                content = key;
-                            }
-                            else
-                            {
-                                //csv.Append("\"" + content + "\"");
-                                //if (i < script.variableNameList.Count - 1) csv.Append(",");
-                                //else csv.Append("\n");
-                            }
-                            ///Json数据
-                            if (i == 0)
-                            {
-                                if (sheetName.ToLower().IndexOf("language") > -1)
-                                {
-                                    //翻译配置
-                                    jsonConfig.SetValue(index - dataIndex, "key", content, script.variableTypeList[i]);
+                                        languageDatas.Add(key, content);
+                                    content = key;
                                 }
                                 else
-                                    jsonConfig.SetValue(index - dataIndex, "ID", content, script.variableTypeList[i]);
+                                {
+                                    //csv.Append("\"" + content + "\"");
+                                    //if (i < script.variableNameList.Count - 1) csv.Append(",");
+                                    //else csv.Append("\n");
+                                }
+                                ///Json数据
+                                if (i == 0)
+                                {
+                                    if (sheetName.ToLower().IndexOf("language") > -1)
+                                    {
+                                        //翻译配置
+                                        jsonConfig.SetValue(index - dataIndex, "key", content, script.variableTypeList[i]);
+                                    }
+                                    else
+                                        jsonConfig.SetValue(index - dataIndex, "ID", content, script.variableTypeList[i]);
+                                }
+                                jsonConfig.SetValue(index - dataIndex, script.variableNameList[i], content, script.variableTypeList[i]);
+                                ///Csv数据
                             }
-                            jsonConfig.SetValue(index - dataIndex, script.variableNameList[i], content, script.variableTypeList[i]);
-                            ///Csv数据
                         }
+                        index++;
                     }
-                    index++;
-                }
-                script.SaveScript(InitDataType.Json, sheetName);
-                jsonConfig.Save();
-                //csv.Save();
-                Console.WriteLine("导出：" + excelReader.Name + "完成");
-            } while (excelReader.NextResult());
+                    script.SaveScript(InitDataType.Json, sheetName);
+                    jsonConfig.Save();
+                    //csv.Save();
+                    Console.WriteLine("导出：" + excelReader.Name + "完成");
+                } while (excelReader.NextResult());
+            }
             return nameList;
         }
         static void CopyToUnity()
