@@ -26,7 +26,7 @@ namespace BuildExcelConfig
             }
             while (true)
             {
-                Console.WriteLine("是否使用翻译配置(yes/no)=====>配置路径：" + Config.readExcelPath);
+                Console.WriteLine("是否使用翻译配置（输入yes或者y：不区分大小写）=====>配置路径：" + Config.readExcelPath);
                 string input = Console.ReadLine();
                 Console.WriteLine("开始导出配置：" + input.ToLower() == "yes" || input.ToLower() == "y" ? "导出翻译" : "");
                 Config.RefreshFolder();
@@ -55,6 +55,7 @@ namespace BuildExcelConfig
                 languageDatas = new Dictionary<string, string>();
             foreach (FileInfo file in dir.GetFiles("*.xlsx"))
             {
+                //排除excel缓存文件
                 if (file.Name.IndexOf("$") == -1)
                 {
                     Console.WriteLine(file.Name);
@@ -132,7 +133,7 @@ namespace BuildExcelConfig
                 do
                 {
                     if (excelReader.Name.ToLower().IndexOf("log") > -1
-                        || excelReader.Name.ToLower().IndexOf("Sheet") > -1
+                        || excelReader.Name.ToLower().IndexOf("sheet") > -1
                         || Tool.IsChinese(excelReader.Name))
                         continue;
                     //excelReader.Name：sheet名称
