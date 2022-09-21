@@ -50,6 +50,7 @@ public class CreateConfig
         }
         asset.ReadFromData(jsonData);
         CreateAssetBundle(asset, assetPathAndName);
+        Debug.Log("创建asset配置完毕！");
     }
     [MenuItem("CreateAsset/AssetBundle")]
     static void BuildAssetBundle()
