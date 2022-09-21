@@ -24,6 +24,7 @@ public class CreateConfig
 #if !List
         CreateConfigAsset<#{ClassName}ConfigAsset>();
 #endif
+        Debug.Log("创建asset配置完毕！");
         AssetDatabase.Refresh();
     }
 
@@ -50,7 +51,6 @@ public class CreateConfig
         }
         asset.ReadFromData(jsonData);
         CreateAssetBundle(asset, assetPathAndName);
-        Debug.Log("创建asset配置完毕！");
     }
     [MenuItem("CreateAsset/AssetBundle")]
     static void BuildAssetBundle()
