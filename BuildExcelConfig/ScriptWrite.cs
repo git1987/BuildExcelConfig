@@ -211,8 +211,14 @@ namespace BuildExcelConfig
                                 if (languageList[k])
                                 {
                                     changeContent.Replace("#{typeName}", "[SerializeField]\n        private " + variableTypeList[k]);
-                                    changeContent.AppendLine("        public " + variableTypeList[k] + " " + Tool.LowerToUpper(variableNameList[k]) +
-                                        "\n        {get{return ConfigAssetsData.instance.GetLanguageText(_" + Tool.LowerToUpper(variableNameList[k]) + "); }set{ _" + Tool.LowerToUpper(variableNameList[k]) + " = value;}}");
+                                    changeContent.AppendLine("\t\tpublic " + variableTypeList[k] + " " + Tool.LowerToUpper(variableNameList[k]) +
+                                        "\n\t\t{" +
+                                        "\n\t\t\tget" +
+                                        "\n\t\t\t{" +
+                                        "\n\t\t\t\tif (ConfigAssetsData.instance == null) return _" + Tool.LowerToUpper(variableNameList[k]) + ";" +
+                                        "\n\t\t\t\treturn ConfigAssetsData.instance.GetLanguageText(_" + Tool.LowerToUpper(variableNameList[k]) + ");" +
+                                        "\n\t\t\t}\n\t\t\tset { _" + Tool.LowerToUpper(variableNameList[k]) + " = value; }" +
+                                        "\n\t\t}");
                                     for (languageIndex = k; languageIndex < forCount; languageIndex++)
                                     {
                                         if (variableNameList[languageIndex].IndexOf(variableNameList[k]) < 0)
@@ -318,8 +324,14 @@ namespace BuildExcelConfig
                                 if (languageList[k])
                                 {
                                     changeContent.Replace("#{typeName}", "[SerializeField]\n        private " + variableTypeList[k]);
-                                    changeContent.AppendLine("        public " + variableTypeList[k] + " " + Tool.LowerToUpper(variableNameList[k]) +
-                                        "\n        {get{return ConfigAssetsData.instance.GetLanguageText(_" + Tool.LowerToUpper(variableNameList[k]) + "); }set{ _" + Tool.LowerToUpper(variableNameList[k]) + " = value;}}");
+                                    changeContent.AppendLine("\t\tpublic " + variableTypeList[k] + " " + Tool.LowerToUpper(variableNameList[k]) +
+                                        "\n\t\t{" +
+                                        "\n\t\t\tget" +
+                                        "\n\t\t\t{" +
+                                        "\n\t\t\t\tif (ConfigAssetsData.instance == null) return _" + Tool.LowerToUpper(variableNameList[k]) + ";" +
+                                        "\n\t\t\t\treturn ConfigAssetsData.instance.GetLanguageText(_" + Tool.LowerToUpper(variableNameList[k]) + ");" +
+                                        "\n\t\t\t}\n\t\t\tset { _" + Tool.LowerToUpper(variableNameList[k]) + " = value; }" +
+                                        "\n\t\t}");
                                     for (languageIndex = k; languageIndex < forCount; languageIndex++)
                                     {
                                         if (variableNameList[languageIndex].IndexOf(variableNameList[k]) < 0)

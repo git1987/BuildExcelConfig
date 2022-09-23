@@ -22,6 +22,7 @@ public class CreateConfig
         if (!Directory.Exists(Application.dataPath + "/Res/ConfigAsset/"))
             Directory.CreateDirectory(Application.dataPath + "/Res/ConfigAsset/");
         CreateConfigAsset<LanguageConfigAsset>();        CreateConfigAsset<LanguageDataConfigAsset>();
+        Debug.Log("创建asset配置完毕！");
         AssetDatabase.Refresh();
     }
 
