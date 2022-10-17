@@ -14,11 +14,14 @@ namespace BuildExcelConfig
         {
 
         }
+        /// enum配置sheet
+        static ConfigEnum configEnum;
         static void Main(string[] args)
         {
             //test();
             //return;
             Config.Init();
+
             while (Config.pathError)
             {
                 Console.WriteLine("修改文件夹下的path文件路径");
@@ -30,6 +33,7 @@ namespace BuildExcelConfig
                 string input = Console.ReadLine();
                 Console.WriteLine("开始导出配置：" + input.ToLower() == "yes" || input.ToLower() == "y" ? "导出翻译" : "");
                 Config.RefreshFolder();
+                configEnum = new ConfigEnum();
                 AllExcel(input.ToLower() == "yes" || input.ToLower() == "y");
                 Console.WriteLine("导出配置、创建scprite脚本文件==>完成");
                 ScriptWrite.CopyCSharpTemFile();
@@ -59,27 +63,29 @@ namespace BuildExcelConfig
                 if (file.Name.IndexOf("$") == -1)
                 {
                     Console.WriteLine(file.Name);
-                    if (file.Name.ToLower().IndexOf("enum") > -1)
-                    {
-                        ReadEnumExcel(file.FullName);
-                    }
-                    else
-                    {
-                        classNameList.Add(ReadExcel(file.FullName, languageDatas));
-                    }
+                    classNameList.Add(ReadExcel(file.FullName, languageDatas));
+                    //if (file.Name.ToLower().IndexOf("enum") > -1)
+                    //{
+                    //    ReadEnumExcel(file.FullName);
+                    //}
+                    //else
+                    //{
+                    //}
                 }
             }
+            //导出每个表中的enum  sheet
+            configEnum.Save(Config.currentPath + "excel/Config_Enum.cs");
             if (useLanguage)
                 LanguageData.Save(languageDatas);
         }
         //读取枚举的excel
-        static void ReadEnumExcel(string excelPath)
+        //static void ReadEnumExcel(string excelPath)
+        static void ReadEnumExcel(IExcelDataReader excelReader)
         {
-            using (FileStream fileStream = File.Open(excelPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            //using (FileStream fileStream = File.Open(excelPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                IExcelDataReader excelReader = ExcelReaderFactory.CreateOpenXmlReader(fileStream);
+                //excelReader = ExcelReaderFactory.CreateOpenXmlReader(fileStream);
                 string currentName = string.Empty;
-                ConfigEnum ce = new ConfigEnum();
                 do
                 {
                     if (excelReader.Name != "enum")
@@ -104,7 +110,7 @@ namespace BuildExcelConfig
                             {
                                 currentName = excelReader.GetString(0);
                                 enumNameSummary = excelReader.GetString(1);
-                                ce.AddEnumSummary(currentName, enumNameSummary);
+                                configEnum.AddEnumSummary(currentName, enumNameSummary);
                             }
                             //枚举值名称
                             string enumValueName = excelReader.GetString(2);
@@ -115,12 +121,12 @@ namespace BuildExcelConfig
                             {
                                 continue;
                             }
-                            ce.AddEnum(currentName, enumValueName, enumValue, enumValueNameSummary);
+                            configEnum.AddEnum(currentName, enumValueName, enumValue, enumValueNameSummary);
                         }
                         index++;
                     }
                 } while (excelReader.NextResult());
-                ce.Save(Config.currentPath + "excel/Config_Enum.cs");
+                //configEnum.Save(Config.currentPath + "excel/Config_Enum.cs");
             }
         }
 
@@ -136,6 +142,11 @@ namespace BuildExcelConfig
                         || excelReader.Name.ToLower().IndexOf("sheet") > -1
                         || Tool.IsChinese(excelReader.Name))
                         continue;
+                    if (excelReader.Name.ToLower() == "enum")
+                    {
+                        ReadEnumExcel(excelReader);
+                        continue;
+                    }
                     //excelReader.Name：sheet名称
                     string sheetName = Tool.LowerToUpper(excelReader.Name, true);
                     int index = 0;
