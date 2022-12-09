@@ -62,6 +62,7 @@ public class ConfigAssetsData : MonoBehaviour
             return languageConfigAsset.GetLanguageText(languageKey);
         if (languageDataConfigAsset != null)
             return languageDataConfigAsset.GetLanguageText(languageKey);
+        Debug.LogError(languageKey + "is not in config!");
         return languageKey;
     }
 #if !List
