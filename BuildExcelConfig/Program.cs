@@ -203,6 +203,7 @@ namespace BuildExcelConfig
                                 }
                                 //内容
                                 string content = excelReader.GetString(i);
+                                if (content == null) content = String.Empty;
                                 if (languageDatas != null && script.languageList[i])
                                 {
                                     //判断是否在翻译配置

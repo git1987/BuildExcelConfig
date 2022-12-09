@@ -42,10 +42,28 @@ public static class ListExtend
             {
                 if (typeof(T).IsEnum)
                 {
+                    if (strs[i] == string.Empty)
+                    {
+                        strs[i] = "None";
+                    }
                     t = (T)System.Enum.Parse(typeof(T), strs[i]);
                 }
                 else
                 {
+                    if (strs[i] == string.Empty)
+                    {
+                        if (typeof(T) == typeof(string))
+                        {
+                        }
+                        else if (typeof(T) == typeof(bool))
+                        {
+                            strs[i] = "false";
+                        }
+                        else
+                        {
+                            strs[i] = "0";
+                        }
+                    }
                     t = (T)Convert.ChangeType(strs[i], typeof(T));
                 }
             }
