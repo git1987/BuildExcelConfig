@@ -94,6 +94,7 @@ public class CreateConfig
         {
             log += "\nname:" + manifest.GetAllAssetBundles()[i];
         }
+        Debug.Log("配置打包ab完成");
         //刷新编辑器 
         AssetDatabase.Refresh();
     }

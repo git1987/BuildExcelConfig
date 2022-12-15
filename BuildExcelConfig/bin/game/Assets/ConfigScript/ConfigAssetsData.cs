@@ -60,6 +60,7 @@ public class ConfigAssetsData : MonoBehaviour
             return languageConfigAsset.GetLanguageText(languageKey);
         if (languageDataConfigAsset != null)
             return languageDataConfigAsset.GetLanguageText(languageKey);
+        Debug.LogError(languageKey + "is not in config!");
         return languageKey;
     }
     private LanguageConfigAsset _languageConfigAsset;    public LanguageConfigAsset languageConfigAsset    {        get        {            if (_languageConfigAsset == null)                Debug.LogError("没有初始化Language AssetBundle");            return _languageConfigAsset;        }    }    private LanguageDataConfigAsset _languageDataConfigAsset;    public LanguageDataConfigAsset languageDataConfigAsset    {        get        {            if (_languageDataConfigAsset == null)                Debug.LogError("没有初始化LanguageData AssetBundle");            return _languageDataConfigAsset;        }    }

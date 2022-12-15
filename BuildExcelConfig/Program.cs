@@ -138,7 +138,7 @@ namespace BuildExcelConfig
                 IExcelDataReader excelReader = ExcelReaderFactory.CreateOpenXmlReader(fileStream);
                 do
                 {
-                    if (excelReader.Name.ToLower().IndexOf("log") > -1
+                    if (excelReader.Name.ToLower() == "log"
                         || excelReader.Name.ToLower().IndexOf("sheet") > -1
                         || Tool.IsChinese(excelReader.Name))
                         continue;
