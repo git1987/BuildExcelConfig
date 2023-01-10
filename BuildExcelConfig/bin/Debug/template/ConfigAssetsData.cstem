@@ -57,11 +57,16 @@ public class ConfigAssetsData : MonoBehaviour
     }
     public string GetLanguageText(string languageKey)
     {
-        if (languageKey.IndexOf("language_") == -1) return languageKey;
-        if (languageConfigAsset != null)
-            return languageConfigAsset.GetLanguageText(languageKey);
-        if (languageDataConfigAsset != null)
-            return languageDataConfigAsset.GetLanguageText(languageKey);
+        if (languageKey.IndexOf("language_") > -1)
+        {
+            if (languageDataConfigAsset == null) Debug.LogError("LanguageData config is not init!");
+            else return languageDataConfigAsset.GetLanguageText(languageKey);
+        }
+        else
+        {
+            if (languageConfigAsset == null) Debug.LogError("Language config is not init!");
+            else return languageConfigAsset.GetLanguageText(languageKey);
+        }
         Debug.LogError(languageKey + "is not in config!");
         return languageKey;
     }
