@@ -81,17 +81,20 @@ namespace BuildExcelConfig
         public List<string> variableTypeList = new List<string>();
         //是否是多语言
         public List<bool> languageList = new List<bool>();
+        //是否翻译配置
+        bool isLanguage;
 
         static public string scriptPath
         {
             get { return Config.writeScriptPath + "ConfigAssetScript/"; }
         }
-        public ScriptWrite(string _fileName)
+        public ScriptWrite(string _fileName, bool _isLanguage)
         {
             Init(scriptPath, _fileName + "ConfigAsset.cs");
             this.fileName = _fileName;
             classNameList.Add(fileName);
             className = _fileName + "ConfigAsset";
+            this.isLanguage = _isLanguage;
         }
         public void Append(int type, string content)
         {
@@ -110,7 +113,8 @@ namespace BuildExcelConfig
                     break;
                 case StringType.language:
                     //输入1才有翻译
-                    languageList.Add(content == "1");
+                    if (isLanguage)
+                        languageList.Add(content == "1");
                     break;
             }
         }
@@ -168,7 +172,7 @@ namespace BuildExcelConfig
                         //变量名
                         if (changeContent.ToString().IndexOf("#{variableName}") >= 0)
                         {
-                            if (languageList[k])
+                            if (isLanguage && languageList[k])
                                 changeContent.Replace("#{variableName}", "_" + Tool.LowerToUpper(variableNameList[k]));
                             else
                                 changeContent.Replace("#{variableName}", Tool.LowerToUpper(variableNameList[k]));
@@ -208,7 +212,7 @@ namespace BuildExcelConfig
                             //类
                             if (className.IndexOf("ConfigAsset") > -1)
                             {
-                                if (languageList[k])
+                                if (isLanguage && languageList[k])
                                 {
                                     changeContent.Replace("#{typeName}", "[SerializeField]\n        private " + variableTypeList[k]);
                                     changeContent.AppendLine("\t\tpublic " + variableTypeList[k] + " " + Tool.LowerToUpper(variableNameList[k]) +
@@ -290,7 +294,7 @@ namespace BuildExcelConfig
                         //变量名称
                         if (changeContent.ToString().IndexOf("#{variableName}") >= 0)
                         {
-                            if (languageList[k])
+                            if (isLanguage && languageList[k])
                                 changeContent.Replace("#{variableName}", "_" + Tool.LowerToUpper(variableNameList[k]));
                             else
                                 changeContent.Replace("#{variableName}", Tool.LowerToUpper(variableNameList[k]));
@@ -321,7 +325,7 @@ namespace BuildExcelConfig
                             //类
                             if (className.IndexOf("ConfigAsset") > -1)
                             {
-                                if (languageList[k])
+                                if (isLanguage && languageList[k])
                                 {
                                     changeContent.Replace("#{typeName}", "[SerializeField]\n        private " + variableTypeList[k]);
                                     changeContent.AppendLine("\t\tpublic " + variableTypeList[k] + " " + Tool.LowerToUpper(variableNameList[k]) +

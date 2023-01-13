@@ -152,7 +152,7 @@ namespace BuildExcelConfig
                     int index = 0;
                     //CsvWrite csv = new CsvWrite(fileName);
                     JsonWrite jsonConfig = new JsonWrite(sheetName);
-                    ScriptWrite script = new ScriptWrite(sheetName);
+                    ScriptWrite script = new ScriptWrite(sheetName, languageDatas != null);
                     nameList.Add(sheetName);
                     while (excelReader.Read())
                     {
