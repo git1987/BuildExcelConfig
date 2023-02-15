@@ -100,11 +100,14 @@ public class CreateConfig
             index++;
         }
 #if UNITY_ANDROID
-        manifest = BuildPipeline.BuildAssetBundles(targetPath, abb, BuildAssetBundleOptions.CollectDependencies, BuildTarget.Android);
+        //移动端压缩ab
+        manifest = BuildPipeline.BuildAssetBundles(targetPath, abb, BuildAssetBundleOptions.ChunkBasedCompression, BuildTarget.Android);
 #elif UNITY_IOS
-        manifest = BuildPipeline.BuildAssetBundles(targetPath, abb, BuildAssetBundleOptions.CollectDependencies, BuildTarget.iOS);
+        //移动端压缩ab
+        manifest = BuildPipeline.BuildAssetBundles(targetPath, abb, BuildAssetBundleOptions.ChunkBasedCompression, BuildTarget.iOS);
 #elif UNITY_STANDALONE_WIN
-        manifest = BuildPipeline.BuildAssetBundles(targetPath, abb, BuildAssetBundleOptions.CollectDependencies, BuildTarget.StandaloneWindows);
+        //PC端不压缩ab
+        manifest = BuildPipeline.BuildAssetBundles(targetPath, abb, BuildAssetBundleOptions.UncompressedAssetBundle, BuildTarget.StandaloneWindows);
 #endif
         Debug.Log("配置打包配置ab完成");
         //刷新编辑器 
