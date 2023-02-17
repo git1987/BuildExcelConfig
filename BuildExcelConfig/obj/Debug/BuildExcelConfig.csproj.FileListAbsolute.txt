@@ -85,7 +85,6 @@ E:\git\BuildExcelConfig\BuildExcelConfig\bin\Debug\BuildExcelConfig.exe.config
 E:\git\BuildExcelConfig\BuildExcelConfig\bin\Debug\BuildExcelConfig.exe
 E:\git\BuildExcelConfig\BuildExcelConfig\bin\Debug\BuildExcelConfig.pdb
 E:\git\BuildExcelConfig\BuildExcelConfig\bin\Debug\Excel.dll
-E:\git\BuildExcelConfig\BuildExcelConfig\bin\Debug\JsonSQ.dll
 E:\git\BuildExcelConfig\BuildExcelConfig\bin\Debug\LitJson.dll
 E:\git\BuildExcelConfig\BuildExcelConfig\bin\Debug\Newtonsoft.Json.dll
 E:\git\BuildExcelConfig\BuildExcelConfig\bin\Debug\ICSharpCode.SharpZipLib.dll
