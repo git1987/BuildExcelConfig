@@ -52,11 +52,10 @@ public class LanguageConfigAsset : ConfigAssetBase
     }
     public string GetLanguageText(string key)
     {
-        if (configsDictionary.ContainsKey(key))
-            return configsDictionary[key].GetLanguageText(languageType);
+        if (configsDictionary.TryGetValue(key, out Language config))
+            return config.GetLanguageText(languageType);
         else
         {
-            UnityEngine.Debug.Log(key + " is null");
             return key;
         }
     }

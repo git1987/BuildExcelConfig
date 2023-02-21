@@ -55,8 +55,8 @@ public class #{ClassName}ConfigAsset : ConfigAssetBase
     }
     public string GetLanguageText(string key)
     {
-        if (configsDictionary.ContainsKey(key))
-            return configsDictionary[key].GetLanguageText(languageType);
+        if (configsDictionary.TryGetValue(key, out #{ClassName}Config config))
+            return config.GetLanguageText(languageType);
         else
         {
             return key;

@@ -11,6 +11,7 @@ using LitJson;
 /// </summary>
 public class CreateConfig
 {
+    static string assetPath = Application.dataPath + "/Res/ConfigAsset/";
     [MenuItem("CreateAsset/CreateConfigAssets")]
     public static void CreateConfigAsset()
     {
@@ -30,8 +31,6 @@ public class CreateConfig
     {
         ConfigAssetBase asset = ScriptableObject.CreateInstance<T>() as ConfigAssetBase;
         string configName = asset.GetConfigName();
-
-        string assetPath = Application.dataPath + "/Res/ConfigAsset/";
         if (!Directory.Exists(assetPath))
             Directory.CreateDirectory(assetPath);
         string assetPathAndName = "Assets/Res/ConfigAsset/" + configName + ".asset";
@@ -82,19 +81,33 @@ public class CreateConfig
         if (!IsFolderExists(targetPath)) Directory.CreateDirectory(targetPath);
         //打包资源 
         AssetBundleManifest manifest;
-#if UNITY_ANDROID
-        manifest = BuildPipeline.BuildAssetBundles(targetPath, BuildAssetBundleOptions.CollectDependencies, BuildTarget.Android);
-#elif UNITY_IOS
-        manifest = BuildPipeline.BuildAssetBundles(targetPath, BuildAssetBundleOptions.CollectDependencies, BuildTarget.iOS);
-#elif UNITY_STANDALONE_WIN
-        manifest = BuildPipeline.BuildAssetBundles(targetPath, BuildAssetBundleOptions.CollectDependencies, BuildTarget.StandaloneWindows);
-#endif
-        string log = "AssetBundle";
-        for (int i = 0; i < manifest.GetAllAssetBundles().Length; i++)
+        DirectoryInfo configAssetFolder = new DirectoryInfo(Application.dataPath + "/Res/ConfigAsset");
+        FileInfo[] files = configAssetFolder.GetFiles("*.asset");
+        AssetBundleBuild[] abb = new AssetBundleBuild[1];
+        abb[0] = new AssetBundleBuild() { 
+            assetBundleName = "config",
+            assetNames = new string[files.Length],
+        };
+        int index = 0;
+        foreach (FileInfo file in files)
         {
-            log += "\nname:" + manifest.GetAllAssetBundles()[i];
+            string unityAssetPath = "Assets/Res/ConfigAsset/" + file.Name;
+            Object obj = AssetDatabase.LoadAssetAtPath<Object>(unityAssetPath);
+            Debug.Log(obj);
+            abb[0].assetNames[index] = unityAssetPath;
+            index++;
         }
-        Debug.Log("配置打包ab完成");
+#if UNITY_ANDROID
+        //移动端压缩ab
+        manifest = BuildPipeline.BuildAssetBundles(targetPath, abb, BuildAssetBundleOptions.ChunkBasedCompression, BuildTarget.Android);
+#elif UNITY_IOS
+        //移动端压缩ab
+        manifest = BuildPipeline.BuildAssetBundles(targetPath, abb, BuildAssetBundleOptions.ChunkBasedCompression, BuildTarget.iOS);
+#elif UNITY_STANDALONE_WIN
+        //PC端不压缩ab
+        manifest = BuildPipeline.BuildAssetBundles(targetPath, abb, BuildAssetBundleOptions.UncompressedAssetBundle, BuildTarget.StandaloneWindows);
+#endif
+        Debug.Log("配置打包配置ab完成");
         //刷新编辑器 
         AssetDatabase.Refresh();
     }

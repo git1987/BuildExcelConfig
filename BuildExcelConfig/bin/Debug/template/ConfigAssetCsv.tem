@@ -32,8 +32,8 @@ public class #{ClassName}ConfigAsset : ConfigAssetBase
         configsDictionary = new Dictionary<int, #{ClassName}Config>();
         for (int i = 0; i < configs.Count; i++)
         {
-            if (!configsDictionary.ContainsKey(configs[i].ID))
-                configsDictionary.Add(configs[i].ID, configs[i]);
+            if (!configsDictionary.TryGetValue(configs[i].ID, out #{ClassName}Config config))
+                configsDictionary.Add(configs[i].ID, config);
         }
     }
     public override void ReadFromData(object obj)
