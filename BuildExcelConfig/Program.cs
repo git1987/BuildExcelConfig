@@ -183,7 +183,8 @@ namespace BuildExcelConfig
                                         break;
                                     }
                                 }
-                                else if (i >= script.variableNameList.Count)
+                                //数据列数超过名称、类型后的数据忽略
+                                else if (i >= script.variableNameList.Count || i >= script.variableTypeList.Count)
                                 {
                                     break;
                                 }
@@ -193,7 +194,7 @@ namespace BuildExcelConfig
                         else
                         {
                             //从第四行开始储存配置：根据变量名长度
-                            for (int i = 0; i < script.variableNameList.Count; i++)
+                            for (int i = 0; i < script.variableNameList.Count && i < script.variableTypeList.Count; i++)
                             {
                                 //从第一列开始遍历内容
                                 if (excelReader.GetString(i) == null || excelReader.GetString(i) == string.Empty)
@@ -232,7 +233,7 @@ namespace BuildExcelConfig
                                     else
                                         jsonConfig.SetValue(index - dataIndex, "ID", content, script.variableTypeList[i]);
                                 }
-                                jsonConfig.SetValue(index - dataIndex, script.variableNameList[i], content, script.variableNameList[i]);
+                                jsonConfig.SetValue(index - dataIndex, script.variableNameList[i], content, script.variableTypeList[i]);
                                 ///Csv数据
                             }
                         }

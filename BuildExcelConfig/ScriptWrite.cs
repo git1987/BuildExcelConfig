@@ -122,7 +122,8 @@ namespace BuildExcelConfig
         {
             if (variableNameList.Count != variableTypeList.Count)
             {
-                throw new Exception("变量名、变量类型、备注数量不相等：" + className);
+                //throw new Exception("变量名、变量类型、备注数量不相等：" + className);
+                Console.WriteLine("变量名、变量类型、备注数量不相等：" + className);
             }
             //变量个数
             int forCount = variableNameList.Count;
