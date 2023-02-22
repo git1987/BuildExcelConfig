@@ -232,7 +232,7 @@ namespace BuildExcelConfig
                                     else
                                         jsonConfig.SetValue(index - dataIndex, "ID", content, script.variableTypeList[i]);
                                 }
-                                jsonConfig.SetValue(index - dataIndex, script.variableNameList[i], content, script.variableTypeList[i]);
+                                jsonConfig.SetValue(index - dataIndex, script.variableNameList[i], content, script.variableNameList[i]);
                                 ///Csv数据
                             }
                         }
