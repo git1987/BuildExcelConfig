@@ -16,6 +16,7 @@ namespace BuildExcelConfig
         }
         /// enum配置sheet
         static ConfigEnum configEnum;
+        static ScriptWrite sw;
         static void Main(string[] args)
         {
             //test();
@@ -29,6 +30,7 @@ namespace BuildExcelConfig
             }
             while (true)
             {
+                ScriptWrite.classNameList = new List<string>();
                 Console.WriteLine("是否使用翻译配置（输入yes或者y：不区分大小写）=====>配置路径：" + Config.readExcelPath);
                 string input = Console.ReadLine();
                 Console.WriteLine("开始导出配置：" + input.ToLower() == "yes" || input.ToLower() == "y" ? "导出翻译" : "");

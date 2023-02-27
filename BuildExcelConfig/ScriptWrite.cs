@@ -18,7 +18,10 @@ namespace BuildExcelConfig
     internal class ScriptWrite : DataWrite
     {
         //static string scriptTemplate;
-        static List<string> classNameList = new List<string>();
+        /// <summary>
+        /// 保存类名
+        /// </summary>
+        static public List<string> classNameList;
         static string _languageScriptTemplate = string.Empty;
         static string languageScriptTemplate
         {
@@ -453,7 +456,7 @@ namespace BuildExcelConfig
                     string[] oldContents = oldContent.Split('\n');
                     for (int j = 1; j < oldContents.Length - 1; j++)
                     {
-                        newContent.Append(oldContents[j]);
+                        newContent.AppendLine(oldContents[j]);
                     }
                     if (newContent.ToString() == string.Empty)
                     {
