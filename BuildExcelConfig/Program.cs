@@ -28,15 +28,13 @@ namespace BuildExcelConfig
                 Console.WriteLine("修改文件夹下的path文件路径");
                 Console.ReadKey();
             }
-            while (true)
+            bool language = false;
+            System.Action build = () =>
             {
-                ScriptWrite.classNameList = new List<string>();
-                Console.WriteLine("是否使用翻译配置（输入yes或者y：不区分大小写）=====>配置路径：" + Config.readExcelPath);
-                string input = Console.ReadLine();
-                Console.WriteLine("开始导出配置：" + input.ToLower() == "yes" || input.ToLower() == "y" ? "导出翻译" : "");
+                Console.WriteLine("开始导出配置：" + (language ? "导出翻译" : ""));
                 Config.RefreshFolder();
                 configEnum = new ConfigEnum();
-                AllExcel(input.ToLower() == "yes" || input.ToLower() == "y");
+                AllExcel(language);
                 Console.WriteLine("导出配置、创建scprite脚本文件==>完成");
                 ScriptWrite.CopyCSharpTemFile();
                 Console.WriteLine(".cstem==>完成");
@@ -44,12 +42,38 @@ namespace BuildExcelConfig
                 Console.WriteLine("copy.cs==>完成");
                 //复制到Unity工程中，父级目录和Unity工程目录放在一起
                 CopyToUnity();
-                Console.WriteLine("按Esc键退出");
+            };
+            //FileSystemWatcher watcher = new FileSystemWatcher();
+            //watcher.Path = Config.readExcelPath;
+            //watcher.NotifyFilter = NotifyFilters.LastWrite |
+            //    NotifyFilters.FileName |
+            //    NotifyFilters.Size;
+            //watcher.Changed += new FileSystemEventHandler((s, e) =>
+            //{
+            //    //Console.WriteLine("File：{0} {1}！", e.FullPath, e.ChangeType);
+            //    Console.WriteLine("文件发生变化！自动导出配置");
+            //    build.Invoke();
+            //});
+            while (true)
+            {
+                ScriptWrite.classNameList = new List<string>();
+                Console.WriteLine($"=====>配置路径：{Config.readExcelPath}");
+                Console.WriteLine("是否使用翻译配置（输入yes或者y：不区分大小写,按Esc键退出）");
                 ConsoleKeyInfo info = Console.ReadKey();
                 if (info.Key == ConsoleKey.Escape)
                 {
                     break;
                 }
+                else if (info.Key == ConsoleKey.Enter)
+                {
+                    //不翻译，直接导出配置
+                }
+                else
+                {
+                    string input = info.KeyChar + Console.ReadLine();
+                    language = input.ToLower() == "yes" || input.ToLower() == "y";
+                }
+                build.Invoke();
             }
         }
         static void AllExcel(bool useLanguage)

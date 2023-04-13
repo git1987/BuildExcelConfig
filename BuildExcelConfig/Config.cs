@@ -38,9 +38,9 @@ namespace BuildExcelConfig
                 jd["read"]["template"] = currentPath + "template/";
                 jd["write"] = new JsonData();
                 jd["write"]["data"] = currentPath + "data/";
-                Directory.CreateDirectory(currentPath + "data/");
+                //Directory.CreateDirectory(currentPath + "data/");
                 jd["write"]["script"] = currentPath + "ConfigScript/";
-                Directory.CreateDirectory(currentPath + "ConfigScript/");
+                //Directory.CreateDirectory(currentPath + "ConfigScript/");
                 json = Tool.JsonFormat(jd.ToJson());
                 //sw.Write(json);
                 //清空缓冲区
@@ -84,16 +84,16 @@ namespace BuildExcelConfig
                     Console.WriteLine(string.Format("读取读取模版路径错误==>[{0}]", readTemplatePath));
                     return true;
                 }
-                else if (!Directory.Exists(writeScriptPath))
-                {
-                    Console.WriteLine(string.Format("生成配置脚本路径错误==>[{0}]", writeScriptPath));
-                    return true;
-                }
-                else if (!Directory.Exists(writeDataPath))
-                {
-                    Console.WriteLine(string.Format("生成配置路径错误==>[{0}]", writeDataPath));
-                    return true;
-                }
+                //else if (!Directory.Exists(writeScriptPath))
+                //{
+                //    Console.WriteLine(string.Format("生成配置脚本路径错误==>[{0}]", writeScriptPath));
+                //    return true;
+                //}
+                //else if (!Directory.Exists(writeDataPath))
+                //{
+                //    Console.WriteLine(string.Format("生成配置路径错误==>[{0}]", writeDataPath));
+                //    return true;
+                //}
                 return false;
             }
         }
