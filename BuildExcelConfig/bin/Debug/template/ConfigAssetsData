@@ -33,6 +33,9 @@ public class ConfigAssetsData : MonoBehaviour
         Application.streamingAssetsPath +"/IOS/";
 #elif UNITY_STANDALONE_WIN
         Application.streamingAssetsPath + "/Windows/";
+#elif UNITY_WEBGL
+        Application.streamingAssetsPath + "/WebGL/";
+#endif
 #endif
         ab = AssetBundle.LoadFromFile(streamingFilePath + "/config");
 #if !List

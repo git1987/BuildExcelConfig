@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.IO;
-using System.Text;
 using System.Collections;
-using System.Collections.Generic;
 using LitJson;
 
 /// <summary>
@@ -22,9 +20,19 @@ public class CreateConfig
     {
         if (!Directory.Exists(Application.dataPath + "/Res/ConfigAsset/"))
             Directory.CreateDirectory(Application.dataPath + "/Res/ConfigAsset/");
-#if !List
-        CreateConfigAsset<#{ClassName}ConfigAsset>();
-#endif
+        CreateConfigAsset<EnumNamesAndDescConfigAsset>();
+        CreateConfigAsset<HeroConfigConfigAsset>();
+        CreateConfigAsset<ServantConfigConfigAsset>();
+        CreateConfigAsset<ServantAttributeGroupConfigAsset>();
+        CreateConfigAsset<FunctionalConfigConfigAsset>();
+        CreateConfigAsset<PlayerUpgradeConfigConfigAsset>();
+        CreateConfigAsset<PlayerAttributeGroupConfigAsset>();
+        CreateConfigAsset<TagConfigConfigAsset>();
+        CreateConfigAsset<PickupsConfigConfigAsset>();
+        CreateConfigAsset<LanguageConfigAsset>();
+        CreateConfigAsset<LanguageDataConfigAsset>();
+        CreateConfigAsset<MonsterConfigConfigAsset>();
+
         Debug.Log("创建asset配置完毕！");
         AssetDatabase.Refresh();
     }
@@ -78,6 +86,8 @@ public class CreateConfig
        + "/IOS/";
 #elif UNITY_STANDALONE_WIN
        + "/Windows/";
+#elif UNITY_WEBGL
+            + "WebGL";
 #endif
         //创建目录
         if (!IsFolderExists(targetPath)) Directory.CreateDirectory(targetPath);
@@ -86,7 +96,8 @@ public class CreateConfig
         DirectoryInfo configAssetFolder = new DirectoryInfo(Application.dataPath + "/Res/ConfigAsset");
         FileInfo[] files = configAssetFolder.GetFiles("*.asset");
         AssetBundleBuild[] abb = new AssetBundleBuild[1];
-        abb[0] = new AssetBundleBuild() { 
+        abb[0] = new AssetBundleBuild()
+        {
             assetBundleName = "config",
             assetNames = new string[files.Length],
         };
@@ -108,6 +119,9 @@ public class CreateConfig
 #elif UNITY_STANDALONE_WIN
         //PC端不压缩ab
         manifest = BuildPipeline.BuildAssetBundles(targetPath, abb, BuildAssetBundleOptions.UncompressedAssetBundle, BuildTarget.StandaloneWindows);
+#elif UNITY_WEBGL
+        //WebGL端压缩ab
+        manifest = BuildPipeline.BuildAssetBundles(targetPath, abb, BuildAssetBundleOptions.ChunkBasedCompression, BuildTarget.WebGL);
 #endif
         Debug.Log("配置打包配置ab完成");
         //刷新编辑器 
