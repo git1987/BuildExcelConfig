@@ -456,7 +456,7 @@ namespace BuildExcelConfig
                     string[] oldContents = oldContent.Split('\n');
                     for (int j = 1; j < oldContents.Length - 1; j++)
                     {
-                        newContent.Append(oldContents[j]);
+                        newContent.AppendLine(oldContents[j]);
                     }
                     if (newContent.ToString() == string.Empty)
                     {

@@ -52,7 +52,7 @@ public class LanguageConfigAsset : ConfigAssetBase
     }
     public string GetLanguageText(string key)
     {
-        if (configsDictionary.TryGetValue(key, out Language config))
+        if (configsDictionary.TryGetValue(key, out LanguageConfig config))
             return config.GetLanguageText(languageType);
         else
         {

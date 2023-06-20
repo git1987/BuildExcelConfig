@@ -1,9 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 using System.IO;
-using System.Text;
 using System.Collections;
-using System.Collections.Generic;
 using LitJson;
 
 /// <summary>
@@ -11,6 +9,17 @@ using LitJson;
 /// </summary>
 public class CreateConfig
 {
+#if UNITY_ANDROID
+        static string abName = "config_android";
+#elif UNITY_IOS
+        static string abName = "config_ios";
+#elif UNITY_STANDALONE_WIN
+        static string abName = "config_windows";
+#elif UNITY_WEBGL
+        static string abName = "config_webgl";
+#else
+        static string abName = "config_other";
+#endif
     static string assetPath = Application.dataPath + "/Res/ConfigAsset/";
     [MenuItem("CreateAsset/CreateConfigAssets")]
     public static void CreateConfigAsset()
@@ -22,7 +31,9 @@ public class CreateConfig
     {
         if (!Directory.Exists(Application.dataPath + "/Res/ConfigAsset/"))
             Directory.CreateDirectory(Application.dataPath + "/Res/ConfigAsset/");
-        CreateConfigAsset<LanguageConfigAsset>();        CreateConfigAsset<LanguageDataConfigAsset>();
+        CreateConfigAsset<LanguageConfigAsset>();
+        CreateConfigAsset<LanguageDataConfigAsset>();
+
         Debug.Log("创建asset配置完毕！");
         AssetDatabase.Refresh();
     }
@@ -53,29 +64,22 @@ public class CreateConfig
     static void BuildAssetBundle()
     {
         if (!IsFolderExists(Application.streamingAssetsPath)) Directory.CreateDirectory(Application.streamingAssetsPath);
-        string folderAndroidPath = Application.streamingAssetsPath + "/Android";
-        if (IsFolderExists(folderAndroidPath))
+        if (IsFolderExists(Application.streamingAssetsPath + "/Config"))
         {
-            Directory.Delete(folderAndroidPath, true);
-        }
-        string folderIOSPath = Application.streamingAssetsPath + "/IOS";
-        if (IsFolderExists(folderIOSPath))
-        {
-            Directory.Delete(folderIOSPath, true);
-        }
-        string folderWindowPath = Application.streamingAssetsPath + "/Windows";
-        if (IsFolderExists(folderWindowPath))
-        {
-            Directory.Delete(folderWindowPath, true);
+            Directory.Delete(Application.streamingAssetsPath + "/Config", true);
         }
         //打包资源的路径 
-        string targetPath = Application.streamingAssetsPath
+
 #if UNITY_ANDROID
-       + "/Android/";
+        string targetPath = Application.streamingAssetsPath + "/Config/Android/";
 #elif UNITY_IOS
-       + "/IOS/";
+        string targetPath = Application.streamingAssetsPath + "/Config/IOS/";
 #elif UNITY_STANDALONE_WIN
-       + "/Windows/";
+        string targetPath = Application.streamingAssetsPath + "/Config/Windows/";
+#elif UNITY_WEBGL
+        string targetPath = Application.streamingAssetsPath + "/Config/WebGL/";
+#else
+        string targetPath = Application.streamingAssetsPath + "/Config/Other/";
 #endif
         //创建目录
         if (!IsFolderExists(targetPath)) Directory.CreateDirectory(targetPath);
@@ -84,8 +88,9 @@ public class CreateConfig
         DirectoryInfo configAssetFolder = new DirectoryInfo(Application.dataPath + "/Res/ConfigAsset");
         FileInfo[] files = configAssetFolder.GetFiles("*.asset");
         AssetBundleBuild[] abb = new AssetBundleBuild[1];
-        abb[0] = new AssetBundleBuild() { 
-            assetBundleName = "config",
+        abb[0] = new AssetBundleBuild()
+        {
+            assetBundleName = abName,
             assetNames = new string[files.Length],
         };
         int index = 0;
@@ -106,6 +111,9 @@ public class CreateConfig
 #elif UNITY_STANDALONE_WIN
         //PC端不压缩ab
         manifest = BuildPipeline.BuildAssetBundles(targetPath, abb, BuildAssetBundleOptions.UncompressedAssetBundle, BuildTarget.StandaloneWindows);
+#elif UNITY_WEBGL
+        //WebGL端压缩ab
+        manifest = BuildPipeline.BuildAssetBundles(targetPath, abb, BuildAssetBundleOptions.ChunkBasedCompression, BuildTarget.WebGL);
 #endif
         Debug.Log("配置打包配置ab完成");
         //刷新编辑器 
@@ -125,7 +133,7 @@ public class CreateConfig
         AssetDatabase.CreateAsset(so, path);
         AssetDatabase.SaveAssets();
         AssetImporter asset = AssetImporter.GetAtPath(path);
-        asset.assetBundleName = "config";
+        asset.assetBundleName = abName;
         EditorUtility.FocusProjectWindow();
     }
 }

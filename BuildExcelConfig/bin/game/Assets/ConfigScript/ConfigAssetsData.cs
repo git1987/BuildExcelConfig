@@ -9,7 +9,7 @@ public class ConfigAssetsData : MonoBehaviour
     { get { return configAssetsDate; } }
     static public LanguageConfigAsset.LanguageType languageType = LanguageConfigAsset.LanguageType.Base;
 
-    AssetBundle ab;
+    AssetBundle ab = null;
     public bool initFinish { private set; get; }
     private void Awake()
     {
@@ -22,22 +22,30 @@ public class ConfigAssetsData : MonoBehaviour
         }
         Init();
     }
+    private void OnDestroy()
+    {
+        ab?.Unload(true);
+    }
     public void Init()
     {
-        string streamingFilePath =
+
 #if UNITY_ANDROID
-        Application.streamingAssetsPath +"/Android/";
-#elif UNITY_STANDALONE_OSX
-        Application.streamingAssetsPath +"/IOS/";
+        string streamingFilePath = Application.streamingAssetsPath +"/Config/Android/config_android";
 #elif UNITY_IOS
-        Application.streamingAssetsPath +"/IOS/";
+        string streamingFilePath = Application.streamingAssetsPath +"/Config/IOS/config_ios";
 #elif UNITY_STANDALONE_WIN
-        Application.streamingAssetsPath + "/Windows/";
+        string streamingFilePath = Application.streamingAssetsPath +"/Config/Windows/config_windows";
+#elif UNITY_WEBGL
+        string streamingFilePath = Application.streamingAssetsPath +"/Config/WebGL/config_webgl";
+#else
+        string streamingFilePath = Application.streamingAssetsPath +"/Config/Other/config_other";
 #endif
 #if !UNITY_EDITOR
-        ab = AssetBundle.LoadFromFile(streamingFilePath + "/config");
+        ab = AssetBundle.LoadFromFile(streamingFilePath);
 #endif
-        _languageConfigAsset = GetConfigAsset<LanguageConfigAsset, LanguageConfigAsset.LanguageConfig>();        _languageDataConfigAsset = GetConfigAsset<LanguageDataConfigAsset, LanguageDataConfigAsset.LanguageDataConfig>();
+        _languageConfigAsset = GetConfigAsset<LanguageConfigAsset, LanguageConfigAsset.LanguageConfig>();
+        _languageDataConfigAsset = GetConfigAsset<LanguageDataConfigAsset, LanguageDataConfigAsset.LanguageDataConfig>();
+
         initFinish = true;
 #if !UNITY_EDITOR
         ab.Unload(false);
@@ -68,5 +76,25 @@ public class ConfigAssetsData : MonoBehaviour
         Debug.LogError(languageKey + "is not in config!");
         return languageKey;
     }
-    private LanguageConfigAsset _languageConfigAsset;    public LanguageConfigAsset languageConfigAsset    {        get        {            if (_languageConfigAsset == null)                Debug.LogError("没有初始化Language AssetBundle");            return _languageConfigAsset;        }    }    private LanguageDataConfigAsset _languageDataConfigAsset;    public LanguageDataConfigAsset languageDataConfigAsset    {        get        {            if (_languageDataConfigAsset == null)                Debug.LogError("没有初始化LanguageData AssetBundle");            return _languageDataConfigAsset;        }    }
+    private LanguageConfigAsset _languageConfigAsset;
+    public LanguageConfigAsset languageConfigAsset
+    {
+        get
+        {
+            if (_languageConfigAsset == null)
+                Debug.LogError("没有初始化Language AssetBundle");
+            return _languageConfigAsset;
+        }
+    }
+    private LanguageDataConfigAsset _languageDataConfigAsset;
+    public LanguageDataConfigAsset languageDataConfigAsset
+    {
+        get
+        {
+            if (_languageDataConfigAsset == null)
+                Debug.LogError("没有初始化LanguageData AssetBundle");
+            return _languageDataConfigAsset;
+        }
+    }
+
 }

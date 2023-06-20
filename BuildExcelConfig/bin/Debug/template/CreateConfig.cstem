@@ -9,6 +9,17 @@ using LitJson;
 /// </summary>
 public class CreateConfig
 {
+#if UNITY_ANDROID
+        static string abName = "config_android";
+#elif UNITY_IOS
+        static string abName = "config_ios";
+#elif UNITY_STANDALONE_WIN
+        static string abName = "config_windows";
+#elif UNITY_WEBGL
+        static string abName = "config_webgl";
+#else
+        static string abName = "config_other";
+#endif
     static string assetPath = Application.dataPath + "/Res/ConfigAsset/";
     [MenuItem("CreateAsset/CreateConfigAssets")]
     public static void CreateConfigAsset()
@@ -20,19 +31,9 @@ public class CreateConfig
     {
         if (!Directory.Exists(Application.dataPath + "/Res/ConfigAsset/"))
             Directory.CreateDirectory(Application.dataPath + "/Res/ConfigAsset/");
-        CreateConfigAsset<EnumNamesAndDescConfigAsset>();
-        CreateConfigAsset<HeroConfigConfigAsset>();
-        CreateConfigAsset<ServantConfigConfigAsset>();
-        CreateConfigAsset<ServantAttributeGroupConfigAsset>();
-        CreateConfigAsset<FunctionalConfigConfigAsset>();
-        CreateConfigAsset<PlayerUpgradeConfigConfigAsset>();
-        CreateConfigAsset<PlayerAttributeGroupConfigAsset>();
-        CreateConfigAsset<TagConfigConfigAsset>();
-        CreateConfigAsset<PickupsConfigConfigAsset>();
-        CreateConfigAsset<LanguageConfigAsset>();
-        CreateConfigAsset<LanguageDataConfigAsset>();
-        CreateConfigAsset<MonsterConfigConfigAsset>();
-
+#if !List
+        CreateConfigAsset<#{ClassName}ConfigAsset>();
+#endif
         Debug.Log("创建asset配置完毕！");
         AssetDatabase.Refresh();
     }
@@ -63,31 +64,22 @@ public class CreateConfig
     static void BuildAssetBundle()
     {
         if (!IsFolderExists(Application.streamingAssetsPath)) Directory.CreateDirectory(Application.streamingAssetsPath);
-        string folderAndroidPath = Application.streamingAssetsPath + "/Android";
-        if (IsFolderExists(folderAndroidPath))
+        if (IsFolderExists(Application.streamingAssetsPath + "/Config"))
         {
-            Directory.Delete(folderAndroidPath, true);
-        }
-        string folderIOSPath = Application.streamingAssetsPath + "/IOS";
-        if (IsFolderExists(folderIOSPath))
-        {
-            Directory.Delete(folderIOSPath, true);
-        }
-        string folderWindowPath = Application.streamingAssetsPath + "/Windows";
-        if (IsFolderExists(folderWindowPath))
-        {
-            Directory.Delete(folderWindowPath, true);
+            Directory.Delete(Application.streamingAssetsPath + "/Config", true);
         }
         //打包资源的路径 
-        string targetPath = Application.streamingAssetsPath
+
 #if UNITY_ANDROID
-       + "/Android/";
+        string targetPath = Application.streamingAssetsPath + "/Config/Android/";
 #elif UNITY_IOS
-       + "/IOS/";
+        string targetPath = Application.streamingAssetsPath + "/Config/IOS/";
 #elif UNITY_STANDALONE_WIN
-       + "/Windows/";
+        string targetPath = Application.streamingAssetsPath + "/Config/Windows/";
 #elif UNITY_WEBGL
-            + "WebGL";
+        string targetPath = Application.streamingAssetsPath + "/Config/WebGL/";
+#else
+        string targetPath = Application.streamingAssetsPath + "/Config/Other/";
 #endif
         //创建目录
         if (!IsFolderExists(targetPath)) Directory.CreateDirectory(targetPath);
@@ -98,7 +90,7 @@ public class CreateConfig
         AssetBundleBuild[] abb = new AssetBundleBuild[1];
         abb[0] = new AssetBundleBuild()
         {
-            assetBundleName = "config",
+            assetBundleName = abName,
             assetNames = new string[files.Length],
         };
         int index = 0;
@@ -141,7 +133,7 @@ public class CreateConfig
         AssetDatabase.CreateAsset(so, path);
         AssetDatabase.SaveAssets();
         AssetImporter asset = AssetImporter.GetAtPath(path);
-        asset.assetBundleName = "config";
+        asset.assetBundleName = abName;
         EditorUtility.FocusProjectWindow();
     }
 }

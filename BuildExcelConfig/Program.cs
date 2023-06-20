@@ -19,14 +19,14 @@ namespace BuildExcelConfig
         static ScriptWrite sw;
         static void Main(string[] args)
         {
-            //test();
-            //return;
+            //test();return;
             Config.Init();
-
             while (Config.pathError)
             {
-                Console.WriteLine("修改文件夹下的path文件路径");
-                Console.ReadKey();
+                Console.WriteLine("按任意键继续(按Esc退出)");
+                ConsoleKeyInfo info = Console.ReadKey();
+                if (info.Key == ConsoleKey.Escape)
+                    return;
             }
             bool language = false;
             System.Action build = () =>
@@ -43,17 +43,16 @@ namespace BuildExcelConfig
                 //复制到Unity工程中，父级目录和Unity工程目录放在一起
                 CopyToUnity();
             };
-            //FileSystemWatcher watcher = new FileSystemWatcher();
-            //watcher.Path = Config.readExcelPath;
-            //watcher.NotifyFilter = NotifyFilters.LastWrite |
-            //    NotifyFilters.FileName |
-            //    NotifyFilters.Size;
-            //watcher.Changed += new FileSystemEventHandler((s, e) =>
-            //{
-            //    //Console.WriteLine("File：{0} {1}！", e.FullPath, e.ChangeType);
-            //    Console.WriteLine("文件发生变化！自动导出配置");
-            //    build.Invoke();
-            //});
+            FileSystemWatcher watcher = new FileSystemWatcher("E:/git/BuildExcelConfig", "*.xlsx");
+            watcher.NotifyFilter = NotifyFilters.LastWrite |
+                NotifyFilters.FileName |
+                NotifyFilters.Size;
+            watcher.Changed += new FileSystemEventHandler((s, e) =>
+            {
+                Console.WriteLine("文件发生变化！自动导出配置");
+                build.Invoke();
+            });
+            watcher.EnableRaisingEvents = true;
             while (true)
             {
                 ScriptWrite.classNameList = new List<string>();
@@ -100,7 +99,7 @@ namespace BuildExcelConfig
                 }
             }
             //导出每个表中的enum  sheet
-            configEnum.Save(Config.currentPath + "excel/Config_Enum.cs");
+            configEnum.Save(Config.appPath + "excel/Config_Enum.cs");
             if (useLanguage)
                 LanguageData.Save(languageDatas);
         }
@@ -275,45 +274,46 @@ namespace BuildExcelConfig
         }
         static void CopyToUnity()
         {
-            DirectoryInfo folder = new DirectoryInfo(Config.currentPath);
-            DirectoryInfo unityFolder = null;
-            foreach (DirectoryInfo di in folder.Parent.GetDirectories("*", SearchOption.AllDirectories))
-            {
-                if (di.Name == "Assets")
-                {
-                    unityFolder = di;
-                    break;
-                }
-            }
-            if (unityFolder != null)
+            //DirectoryInfo folder = new DirectoryInfo(Config.appPath);
+            //DirectoryInfo unityFolder = null;
+            //foreach (DirectoryInfo di in folder.Parent.GetDirectories("*", SearchOption.AllDirectories))
+            //{
+            //    if (di.Name == "Assets")
+            //    {
+            //        unityFolder = di;
+            //        break;
+            //    }
+            //}
+            //if (unityFolder != null)
+            if (Directory.Exists(Config.unityPath))
             {
                 //脚本
-                if (Directory.Exists(unityFolder.FullName + "/ConfigScript"))
+                if (Directory.Exists(Config.unityPath + "ConfigScript"))
                 {
-                    Directory.Delete(unityFolder.FullName + "/ConfigScript", true);
+                    Directory.Delete(Config.unityPath + "ConfigScript", true);
                 }
-                Directory.CreateDirectory(unityFolder.FullName + "/ConfigScript/Editor");
+                Directory.CreateDirectory(Config.unityPath + "ConfigScript/Editor");
                 DirectoryInfo script = new DirectoryInfo(Config.writeScriptPath);
                 foreach (FileInfo file in script.GetFiles("*", SearchOption.AllDirectories))
                 {
                     if (file.FullName.ToLower().IndexOf("editor") > -1)
                     {
-                        file.CopyTo(unityFolder.FullName + "/ConfigScript/Editor/" + file.Name);
+                        file.CopyTo(Config.unityPath + "ConfigScript/Editor/" + file.Name);
                     }
                     else
-                        file.CopyTo(unityFolder.FullName + "/ConfigScript/" + file.Name);
+                        file.CopyTo(Config.unityPath + "ConfigScript/" + file.Name);
                 }
                 Directory.Delete(Config.writeScriptPath, true);
                 //配置
-                if (Directory.Exists(unityFolder.FullName + "/ConfigAsset"))
+                if (Directory.Exists(Config.outputDataPath))
                 {
-                    Directory.Delete(unityFolder.FullName + "/ConfigAsset", true);
+                    Directory.Delete(Config.outputDataPath, true);
                 }
-                Directory.CreateDirectory(unityFolder.FullName + "/ConfigAsset");
+                Directory.CreateDirectory(Config.outputDataPath);
                 DirectoryInfo data = new DirectoryInfo(Config.writeDataPath);
                 foreach (FileInfo file in data.GetFiles("*", SearchOption.AllDirectories))
                 {
-                    file.CopyTo(unityFolder.FullName + "/ConfigAsset/" + file.Name);
+                    file.CopyTo(Config.outputDataPath + "/" + file.Name);
                 }
                 Directory.Delete(Config.writeDataPath, true);
                 Console.WriteLine("文件复制到工程内完毕");

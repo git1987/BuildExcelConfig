@@ -77,6 +77,10 @@ namespace BuildExcelConfig
         //}
         //}
 
+        /// <summary>
+        /// 格式化json字符串
+        /// </summary>
+        /// <returns></returns>
         public static string JsonFormat(string json)
         {
             try
@@ -104,6 +108,19 @@ namespace BuildExcelConfig
         public static string JsonFormat(JsonData jsonData)
         {
             return JsonFormat(jsonData.ToJson());
+        }
+
+        /// <summary>
+        /// 修改路径中的\，使用/
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static string ResetPathSlash(string path)
+        {
+            string _path = path.Replace("\\\\", "/");
+            _path = _path.Replace("\\", "/");
+            _path = _path.Replace("//", "/");
+            return _path;
         }
     }
 }
