@@ -43,10 +43,11 @@ namespace BuildExcelConfig
                 //复制到Unity工程中，父级目录和Unity工程目录放在一起
                 CopyToUnity();
             };
-            FileSystemWatcher watcher = new FileSystemWatcher("E:/git/BuildExcelConfig", "*.xlsx");
+            FileSystemWatcher watcher = new FileSystemWatcher(Config.readExcelPath, "*.xlsx");
             watcher.NotifyFilter = NotifyFilters.LastWrite |
                 NotifyFilters.FileName |
-                NotifyFilters.Size;
+                NotifyFilters.Size |
+                NotifyFilters.LastAccess;
             watcher.Changed += new FileSystemEventHandler((s, e) =>
             {
                 Console.WriteLine("文件发生变化！自动导出配置");

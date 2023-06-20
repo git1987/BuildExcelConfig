@@ -25,7 +25,7 @@ namespace BuildExcelConfig
         {
             ///路径配置文件
             string filePath = appPath + "BuildExcelConfig.json";
-            Console.WriteLine("配置文件" + filePath);
+            Console.WriteLine("配置文件：" + filePath);
             JsonData jd;
             if (File.Exists(filePath))
             {
