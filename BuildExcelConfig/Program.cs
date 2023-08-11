@@ -151,7 +151,8 @@ namespace BuildExcelConfig
                         }
                         index++;
                     }
-                } while (excelReader.NextResult());
+                } while (false);/*主代码里有NextResoult*/
+                //} while (excelReader.NextResult());
                 //configEnum.Save(Config.currentPath + "excel/Config_Enum.cs");
             }
         }
