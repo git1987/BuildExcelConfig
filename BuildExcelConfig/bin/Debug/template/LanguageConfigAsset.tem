@@ -22,13 +22,13 @@ public class #{ClassName}ConfigAsset : ConfigAssetBase
             #{variableName} = #{assignment};
 #endif
         }
-        public string GetLanguageText(LanguageType type)
+        public string GetLanguageText(Enum_LanguageType type)
         {
             switch (type)
             {
-                case LanguageType.Base:
+                case Enum_LanguageType.Base:
 #if List
-                case LanguageType.#{variableName}:
+                case Enum_LanguageType.#{variableName}:
                     return #{variableName};
 #endif
                 default:
