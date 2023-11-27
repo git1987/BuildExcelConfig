@@ -7,7 +7,7 @@ public class ConfigAssetsData : MonoBehaviour
     static private ConfigAssetsData configAssetsDate;
     static public ConfigAssetsData instance
     { get { return configAssetsDate; } }
-    static public LanguageConfigAsset.LanguageType languageType = LanguageConfigAsset.LanguageType.Base;
+    static public Enum_LanguageType languageType = Enum_LanguageType.Base;
 
     AssetBundle ab = null;
     public bool initFinish { private set; get; }

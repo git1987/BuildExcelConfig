@@ -105,6 +105,9 @@ namespace BuildExcelConfig
                 sb = new StringBuilder();
             }
             sb.Append("public enum " + enumName + " {\n");
+            if(enumName.IndexOf("LanguageType")>-1)
+                sb.Append("\tBase = -1,\n");
+            else
             sb.Append("\tNone = -1,\n");
             foreach (string key in enumValues.Keys)
             {

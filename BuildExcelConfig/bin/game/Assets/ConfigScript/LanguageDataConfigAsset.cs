@@ -1,16 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-
 using UnityEngine;
 using LitJson;
 
 public class LanguageDataConfigAsset : ConfigAssetBase
 {
-    public enum LanguageType
-    {
-        Base = -1,
-        zh = 0,        en = 1,        jp = 2,
-    }
     [System.Serializable]
     public class LanguageDataConfig : ConfigAssetBase.ConfigAsset
     {
@@ -42,7 +36,6 @@ public class LanguageDataConfigAsset : ConfigAssetBase
             }
         }
     }
-    public LanguageType languageType;
     public List<LanguageDataConfig> configs;
     public Dictionary<string, LanguageDataConfig> configsDictionary;
     
@@ -53,7 +46,7 @@ public class LanguageDataConfigAsset : ConfigAssetBase
     public string GetLanguageText(string key)
     {
         if (configsDictionary.TryGetValue(key, out LanguageDataConfig config))
-            return config.GetLanguageText(languageType);
+            return config.GetLanguageText(ConfigAssetData.languageType);
         else
         {
             return key;

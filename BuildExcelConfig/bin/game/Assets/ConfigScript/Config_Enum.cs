@@ -10,3 +10,15 @@ public enum Enum_Test {
 	/*test3*/
 	Test3 = 15,
 }
+/// <summary>
+/// 翻译类型
+/// </summary>
+public enum Enum_LanguageType {
+	Base = -1,
+	/*zh*/
+	zh = 0,
+	/*en*/
+	en = 1,
+	/*jp*/
+	jp = 2,
+}

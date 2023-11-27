@@ -4,6 +4,7 @@ using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 using LitJson;
+using static BuildExcelConfig.ConfigEnum;
 
 namespace BuildExcelConfig
 {
@@ -245,7 +246,9 @@ namespace BuildExcelConfig
                         //翻译配置
                         if (changeContent.ToString().IndexOf("#{languageType,}") >= 0)
                         {
-                            changeContent.Replace("#{languageType,}", string.Format("{0} = {1},", variableNameList[k], (k - 1)));
+                            //changeContent.Replace("#{languageType,}", string.Format("{0} = {1},", variableNameList[k], (k - 1)));
+                            //Program.configEnum.AddEnum("Eunm_LanguageType", variableNameList[k], (k - 1), variableNameList[k]);
+
                         }
                         newContents.Append(changeContent);
                     }

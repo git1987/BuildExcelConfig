@@ -30,3 +30,16 @@ E:\shanggame\BuildExcelConfig\BuildExcelConfig\obj\Release\BuildExcelConfig.cspr
 E:\shanggame\BuildExcelConfig\BuildExcelConfig\obj\Release\BuildExcelConfig.csproj.CopyComplete
 E:\shanggame\BuildExcelConfig\BuildExcelConfig\obj\Release\BuildExcelConfig.exe
 E:\shanggame\BuildExcelConfig\BuildExcelConfig\obj\Release\BuildExcelConfig.pdb
+E:\git\BuildExcelConfig\BuildExcelConfig\bin\Release\BuildExcelConfig.exe.config
+E:\git\BuildExcelConfig\BuildExcelConfig\bin\Release\BuildExcelConfig.exe
+E:\git\BuildExcelConfig\BuildExcelConfig\bin\Release\BuildExcelConfig.pdb
+E:\git\BuildExcelConfig\BuildExcelConfig\bin\Release\Excel.dll
+E:\git\BuildExcelConfig\BuildExcelConfig\bin\Release\LitJson.dll
+E:\git\BuildExcelConfig\BuildExcelConfig\bin\Release\Newtonsoft.Json.dll
+E:\git\BuildExcelConfig\BuildExcelConfig\bin\Release\ICSharpCode.SharpZipLib.dll
+E:\git\BuildExcelConfig\BuildExcelConfig\obj\Release\BuildExcelConfig.csproj.AssemblyReference.cache
+E:\git\BuildExcelConfig\BuildExcelConfig\obj\Release\BuildExcelConfig.csproj.SuggestedBindingRedirects.cache
+E:\git\BuildExcelConfig\BuildExcelConfig\obj\Release\BuildExcelConfig.csproj.CoreCompileInputs.cache
+E:\git\BuildExcelConfig\BuildExcelConfig\obj\Release\BuildExcelConfig.csproj.CopyComplete
+E:\git\BuildExcelConfig\BuildExcelConfig\obj\Release\BuildExcelConfig.exe
+E:\git\BuildExcelConfig\BuildExcelConfig\obj\Release\BuildExcelConfig.pdb

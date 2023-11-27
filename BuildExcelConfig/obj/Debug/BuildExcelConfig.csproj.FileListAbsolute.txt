@@ -89,7 +89,6 @@ E:\git\BuildExcelConfig\BuildExcelConfig\bin\Debug\LitJson.dll
 E:\git\BuildExcelConfig\BuildExcelConfig\bin\Debug\Newtonsoft.Json.dll
 E:\git\BuildExcelConfig\BuildExcelConfig\bin\Debug\ICSharpCode.SharpZipLib.dll
 E:\git\BuildExcelConfig\BuildExcelConfig\obj\Debug\BuildExcelConfig.csproj.AssemblyReference.cache
-E:\git\BuildExcelConfig\BuildExcelConfig\obj\Debug\BuildExcelConfig.csproj.SuggestedBindingRedirects.cache
 E:\git\BuildExcelConfig\BuildExcelConfig\obj\Debug\BuildExcelConfig.csproj.CoreCompileInputs.cache
 E:\git\BuildExcelConfig\BuildExcelConfig\obj\Debug\BuildExcelConfig.csproj.CopyComplete
 E:\git\BuildExcelConfig\BuildExcelConfig\obj\Debug\BuildExcelConfig.exe

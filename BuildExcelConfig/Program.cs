@@ -15,7 +15,7 @@ namespace BuildExcelConfig
 
         }
         /// enum配置sheet
-        static ConfigEnum configEnum;
+        static public ConfigEnum configEnum;
         static ScriptWrite sw;
         static void Main(string[] args)
         {
@@ -188,6 +188,7 @@ namespace BuildExcelConfig
                         //读取每行的内容
                         if (index < dataIndex)
                         {
+                            bool isLanguageConfig = sheetName.ToLower().IndexOf("language") > -1;
                             //第一行至第三行生成配置类 第四行是多语言
                             for (int i = 0; i < excelReader.FieldCount; i++)
                             {
@@ -200,6 +201,13 @@ namespace BuildExcelConfig
                                         else
                                             Console.WriteLine(sheetName + "====>有空的变量名称！！前一个变量名成为：" + excelReader.GetString(i - 1));
                                         break;
+                                    }
+                                    if (isLanguageConfig && i > 0)
+                                    {
+                                        //列创建枚举
+                                        configEnum.AddEnumSummary("Enum_LanguageType", "翻译类型");
+                                        configEnum.AddEnum("Enum_LanguageType",
+                                            excelReader.GetString(i), i - 1, excelReader.GetString(i));
                                     }
                                 }
                                 else if (index == 1)
