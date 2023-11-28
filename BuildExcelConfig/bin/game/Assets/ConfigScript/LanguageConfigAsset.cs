@@ -9,27 +9,21 @@ public class LanguageConfigAsset : ConfigAssetBase
     public class LanguageConfig : ConfigAssetBase.ConfigAsset
     {
         public string key;
-		/*内容*/
-        public string zh;		/*内容*/
-        public string en;		/*内容*/
-        public string jp;
+
         public LanguageConfig()
         {
         }
         public void InitJson(JsonData jd)
         {
             this.key = jd["key"].ToString();
-			/*内容*/
-            zh = jd["zh"].ToString();			/*内容*/
-            en = jd["en"].ToString();			/*内容*/
-            jp = jd["jp"].ToString();
+
         }
-        public string GetLanguageText(LanguageType type)
+        public string GetLanguageText(Enum_LanguageType type)
         {
             switch (type)
             {
-                case LanguageType.Base:
-                case LanguageType.zh:                    return zh;                case LanguageType.en:                    return en;                case LanguageType.jp:                    return jp;
+                case Enum_LanguageType.Base:
+
                 default:
                     UnityEngine.Debug.LogError(type.ToString() + " is null===>" + key);
                     return key;

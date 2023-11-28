@@ -31,6 +31,8 @@ public class CreateConfig
     {
         if (!Directory.Exists(Application.dataPath + "/Res/ConfigAsset/"))
             Directory.CreateDirectory(Application.dataPath + "/Res/ConfigAsset/");
+        CreateConfigAsset<BattleInfoConfigAsset>();
+        CreateConfigAsset<BattleGroupConfigAsset>();
         CreateConfigAsset<LanguageConfigAsset>();
         CreateConfigAsset<LanguageDataConfigAsset>();
 

@@ -1,5 +1,6 @@
 {
   "excel": "E:/git/BuildExcelConfig/BuildExcelConfig/bin/Debug/excel",
   "unitypath": "E:/git/BuildExcelConfig/BuildExcelConfig/bin/game/Assets",
-  "outputDataPath": "E:/git/BuildExcelConfig/BuildExcelConfig/bin/game/Assets/ConfigAsset"
+  "outputDataPath": "E:/git/BuildExcelConfig/BuildExcelConfig/bin/game/Assets/ConfigAsset",
+  "outputType": "2"
 }

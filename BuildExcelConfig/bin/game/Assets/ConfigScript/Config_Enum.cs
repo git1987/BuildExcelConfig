@@ -1,4 +1,18 @@
 /// <summary>
+/// 战斗类型
+/// </summary>
+public enum Enum_BattleType {
+	None = -1,
+	/*普通战斗*/
+	Normal,
+	/*特殊战斗*/
+	Special,
+	/*高难度精英战斗*/
+	Elite,
+	/*boss战*/
+	Boss,
+}
+/// <summary>
 /// 测试枚举
 /// </summary>
 public enum Enum_Test {

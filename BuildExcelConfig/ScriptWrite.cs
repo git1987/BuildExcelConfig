@@ -71,7 +71,9 @@ namespace BuildExcelConfig
             //注释
             summary,
             //翻译
-            language = 3
+            language = 3,
+            //导出类型
+            output
         }
         StringBuilder scriptContent;
 
@@ -79,6 +81,8 @@ namespace BuildExcelConfig
         string fileName;
         //变量名称
         public List<string> variableNameList = new List<string>();
+        //是否导出数据
+        public List<bool> isBuildList = new List<bool>();
         //备注
         public List<string> summarylist = new List<string>();
         //变量类型
@@ -119,6 +123,9 @@ namespace BuildExcelConfig
                     //输入1才有翻译
                     if (isLanguage)
                         languageList.Add(content == "1");
+                    break;
+                case StringType.output:
+                    isBuildList.Add(content == string.Empty || content == "0" || content == Config.outputType);
                     break;
             }
         }
@@ -173,6 +180,7 @@ namespace BuildExcelConfig
                     //第1列固定使用ID变量名，使用ID变量名
                     for (int k = 1; k < forCount; k++)
                     {
+                        if (isBuildList.Count > 0 && !isBuildList[k]) continue;
                         StringBuilder changeContent = new StringBuilder(newContent.ToString());
                         //变量名
                         if (changeContent.ToString().IndexOf("#{variableName}") >= 0)

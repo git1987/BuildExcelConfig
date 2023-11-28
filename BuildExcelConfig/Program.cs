@@ -184,12 +184,12 @@ namespace BuildExcelConfig
                     while (excelReader.Read())
                     {
                         //数据起点
-                        int dataIndex = 5 - 1;
+                        int dataIndex = (Config.outputType == null ? 5 : 6) - 1;
                         //读取每行的内容
                         if (index < dataIndex)
                         {
                             bool isLanguageConfig = sheetName.ToLower().IndexOf("language") > -1;
-                            //第一行至第三行生成配置类 第四行是多语言
+                            //第一行至第三行生成配置类 第四行是多语言 第五行是导出类型（客户端、服务器）
                             for (int i = 0; i < excelReader.FieldCount; i++)
                             {
                                 if (index == 0)

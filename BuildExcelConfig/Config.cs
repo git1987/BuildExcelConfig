@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Text;
@@ -63,6 +64,7 @@ namespace BuildExcelConfig
                     jd["unitypath"] = $"unity工程路径";
                     jd["outputDataPath"] = "配置输出路径";
                 }
+                jd["outputType"] = "导出类型：【0:全部导出】【1:客户端】【2:服务器】";
                 FileStream fs = new FileStream(filePath, FileMode.Create);
                 StreamWriter sw = new StreamWriter(fs);
                 sw.Write(Tool.JsonFormat(jd.ToJson()));
@@ -73,6 +75,7 @@ namespace BuildExcelConfig
                 //关闭文件
                 fs.Close();
                 Console.WriteLine("第一次创建BuildExcelConfig.json配置文件，修改对应路径");
+                Console.WriteLine($">>>\n>>>\n配置文件路径：{appPath}/BuildExcelConfig.json\n>>>\n>>>");
             }
             readExcelPath = jd["excel"].ToString();
             unityPath = jd["unitypath"].ToString();
@@ -90,6 +93,10 @@ namespace BuildExcelConfig
             writeScriptPath = $"{appPath}ConfigScript/";
             writeDataPath = $"{appPath}data/";
             outputDataPath = jd["outputDataPath"].ToString();
+            if (((IDictionary)jd).Contains("outputType"))
+                outputType = jd["outputType"].ToString().ToIntOrNull().GetValueOrDefault().ToString();
+            else
+                outputType = null;
         }
         //刷新文件夹:删除旧的配置文件夹和脚本文件夹
         public static void RefreshFolder()
@@ -142,5 +149,12 @@ namespace BuildExcelConfig
         /// 导出到工程中配置文件的路径
         /// </summary>
         internal static string outputDataPath { private set; get; }
+        /// <summary>
+        /// 导出类型
+        /// 0:全部导出
+        /// 1:客户端
+        /// 2:服务器
+        /// </summary>
+        internal static string outputType { private set; get; }
     }
 }

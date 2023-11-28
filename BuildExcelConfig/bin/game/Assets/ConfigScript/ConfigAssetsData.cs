@@ -7,7 +7,7 @@ public class ConfigAssetsData : MonoBehaviour
     static private ConfigAssetsData configAssetsDate;
     static public ConfigAssetsData instance
     { get { return configAssetsDate; } }
-    static public Enum_LanguageType languageType = Enum_LanguageType.Base;
+    static public Enum_LanguageType languageType = 0;
 
     AssetBundle ab = null;
     public bool initFinish { private set; get; }
@@ -43,6 +43,8 @@ public class ConfigAssetsData : MonoBehaviour
 #if !UNITY_EDITOR
         ab = AssetBundle.LoadFromFile(streamingFilePath);
 #endif
+        _battleInfoConfigAsset = GetConfigAsset<BattleInfoConfigAsset, BattleInfoConfigAsset.BattleInfoConfig>();
+        _battleGroupConfigAsset = GetConfigAsset<BattleGroupConfigAsset, BattleGroupConfigAsset.BattleGroupConfig>();
         _languageConfigAsset = GetConfigAsset<LanguageConfigAsset, LanguageConfigAsset.LanguageConfig>();
         _languageDataConfigAsset = GetConfigAsset<LanguageDataConfigAsset, LanguageDataConfigAsset.LanguageDataConfig>();
 
@@ -76,6 +78,26 @@ public class ConfigAssetsData : MonoBehaviour
         Debug.LogError(languageKey + "is not in config!");
         return languageKey;
     }
+    private BattleInfoConfigAsset _battleInfoConfigAsset;
+    public BattleInfoConfigAsset battleInfoConfigAsset
+    {
+        get
+        {
+            if (_battleInfoConfigAsset == null)
+                Debug.LogError("没有初始化BattleInfo AssetBundle");
+            return _battleInfoConfigAsset;
+        }
+    }
+    private BattleGroupConfigAsset _battleGroupConfigAsset;
+    public BattleGroupConfigAsset battleGroupConfigAsset
+    {
+        get
+        {
+            if (_battleGroupConfigAsset == null)
+                Debug.LogError("没有初始化BattleGroup AssetBundle");
+            return _battleGroupConfigAsset;
+        }
+    }
     private LanguageConfigAsset _languageConfigAsset;
     public LanguageConfigAsset languageConfigAsset
     {

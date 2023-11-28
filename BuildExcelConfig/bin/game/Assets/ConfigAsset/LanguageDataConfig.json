@@ -1,11 +1,3 @@
 ﻿{
-  "name": "LanguageDataConfig",
-  "config": [
-    {
-      "key": "language_test",
-      "zh": "测试",
-      "en": "test",
-      "jp": "ceshi"
-    }
-  ]
+  "name": "LanguageDataConfig"
 }
